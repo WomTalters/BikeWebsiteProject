@@ -39,10 +39,15 @@ public class HomePageLoad extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomePageLoad</title>");            
+            out.println("<title>Hiring Bikes Homepage</title>");
+            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");  
+            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");  
             out.println("</head>");
+            
             out.println("<body>");
-            out.println("<h1>Servlet HomePageLoad at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Welcome to the Hiring Bikes website</h1>");  
+            out.println("<p><a href= \"BookingForm.html\" class =\"button\">Click to Book a Bike</a></p>"); 
+            out.println("<p><a href= \"BikeGallery.html\" class = \"button\">Click to view information on Bikes</a></p>");          
             out.println("</body>");
             out.println("</html>");
         } finally {
