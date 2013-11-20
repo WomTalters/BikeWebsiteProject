@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author Tom
@@ -48,6 +49,9 @@ public class DataBaseAccess {
     
     
     public boolean doQuery(String query){
+        if (statement==null){
+            return false;
+        }
         try {
             statement.executeQuery(query);
             resultSet = statement.getResultSet();
@@ -58,12 +62,41 @@ public class DataBaseAccess {
     }
     
     public boolean doUpdate(String update){
+        if (statement==null){
+            return false;
+        }
+        
         try {
             statement.executeUpdate(update);
         } catch (SQLException ex) {
             return false;
         }        
         return true;
+    }
+    
+    public boolean nextRow(){
+        if (resultSet==null){
+            return false;
+        }
+        
+        try {
+            return resultSet.next();
+        } catch (SQLException ex) {
+            return false;
+        }        
+    }
+    
+    public String getResult(String column){
+        if (resultSet==null){
+            return null;
+        }
+        try {
+            return resultSet.getString(column);
+            
+        } catch (SQLException ex) {
+            return null;
+        }
+        
     }
     
     

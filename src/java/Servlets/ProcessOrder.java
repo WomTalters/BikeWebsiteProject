@@ -43,12 +43,14 @@ public class ProcessOrder extends HttpServlet {
             DataBaseAccess dbac = new DataBaseAccess();
             
             String customer_email = request.getParameter("email");
-            String booking_date = request.getParameter("booking_date");
+            String booking_day = request.getParameter("booking_day");
+            String booking_month = request.getParameter("booking_month");
+            String booking_year = request.getParameter("booking_year");
             String booking_period = request.getParameter("booking_period");
-            String booking_price = request.getParameter("booking_price");
+            int num_biketypes = Integer.parseInt(request.getParameter("num_biketypes"));     
             String note = request.getParameter("note");
             
-            
+            String date = booking_day + "/" + booking_month + "/" + booking_year;
             
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -60,12 +62,72 @@ public class ProcessOrder extends HttpServlet {
             
             out.println("hello");
             
+            
             if (!dbac.makeConnection()){
                 out.println("<h2>Could not make a connection :(</h2>");
                 out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
+                out.println("</body>");
+                out.println("</html>");
+                return;
             }
-           
-    
+            
+            
+            
+            for (int i =0;i<num_biketypes;i++){
+                
+                
+                String bikemodel = request.getParameter("bikemodel_" + i);
+                int number_ordered = Integer.parseInt(request.getParameter("num_ordered_" + i));
+                
+                
+                //add something for servicing later. Should probably change this. worth checking thourougly
+                //this selects a bike that is either not in the booking table or in the booking table but booked for a different time or date
+                dbac.doQuery("SELECT COUNT(bike_id) FROM bike WHERE (bike_id NOT IN (SELECT bike_id FROM booked_bike) OR bike_id NOT IN (SELECT bike_id FROM booked_bike WHERE booking_id IN (SELECT booking_id FROM booking WHERE booking_date='"+date+"' AND (booking_period='"+booking_period+"' OR booking_period='ALL')) )) AND  model="+bikemodel+";");
+                               
+                //checking avaliblity of bikes
+                if (number_ordered > Integer.parseInt(dbac.getResult("COUNT(bike_id)"))){
+                   
+                    out.println("<h2>One or more of the bikes you requested has become unvailable since you loaded up the booking page:(</h2>");
+                    out.println("<a href=\"HomePageLoad\">Please go back to the booking page and try again</a>");                    
+                    out.println("</body>");
+                    out.println("</html>");
+                    return;                                       
+                }                              
+            }
+            
+            
+            for (int i =0;i<num_biketypes;i++){
+                
+                
+                String bikemodel = request.getParameter("bikemodel_" + i);
+                int number_ordered = Integer.parseInt(request.getParameter("num_ordered_" + i));
+                
+                
+                //add something for servicing later. Should probably change this. worth checking thourougly
+                
+                dbac.doQuery("SELECT bike_id FROM bike WHERE (bike_id NOT IN (SELECT bike_id FROM booked_bike) OR bike_id NOT IN (SELECT bike_id FROM booked_bike WHERE booking_id IN (SELECT booking_id FROM booking WHERE booking_date='"+date+"' AND (booking_period='"+booking_period+"' OR booking_period='ALL')) )) AND  model="+bikemodel+";");
+                               
+                for (int j = number_ordered;j>=0;j--){
+                    //dbac.doUpdate("INSERT INTO booked_bike VALUES ()")
+                    dbac.getResult("bike_id");
+                    
+                    
+                }
+                                        
+            }
+            
+            
+            
+            
+            
+            
+                    
+            while (dbac.nextRow()){
+                
+            }
+            
+             
+
             out.println("</body>");
             out.println("</html>");
         } finally {
