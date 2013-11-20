@@ -8,22 +8,24 @@ package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import otherClasses.DataBaseAccess;
 
 /**
  *
  * @author Tom
  */
-@WebServlet(name = "HomePageLoad", urlPatterns = {"/HomePageLoad"})
-public class HomePageLoad extends HttpServlet {
+@WebServlet(name = "ProcessOrder", urlPatterns = {"/ProcessOrder"})
+public class ProcessOrder extends HttpServlet {
 
-    /**This servlet is used to make the homepage load with an up to date bike list 
-     * that shows what bikes are available
-     * 
+    /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -38,18 +40,36 @@ public class HomePageLoad extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             
+            DataBaseAccess dbac = new DataBaseAccess();
+            
+            String customer_email = request.getParameter("email");
+            String booking_date = request.getParameter("booking_date");
+            String booking_period = request.getParameter("booking_period");
+            double booking_price = Double.parseDouble(request.getParameter("booking_price"));
+            String note = request.getParameter("note");
+            
+            
+            
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Hiring Bikes Homepage</title>");
-            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");  
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");  
+            out.println("<title>Payment information</title>");            
             out.println("</head>");
+            out.println("<body>");           
             
-            out.println("<body>");
-            out.println("<h1>Welcome to the Hiring Bikes website</h1>");  
-            out.println("<p><a href= \"ProcessOrder\" class =\"button\">Click to Book a Bike</a></p>"); 
-            out.println("<p><a href= \"BikeGallery.html\" class = \"button\">Click to view information on Bikes</a></p>");          
+            
+            
+            
+            if (!dbac.makeConnection()){
+                out.println("<h2>Could not make a connection :(</h2>");
+                out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
+            }
+           
+                
+            
+            
+
+            
             out.println("</body>");
             out.println("</html>");
         } finally {
