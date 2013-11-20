@@ -45,7 +45,7 @@ public class ProcessOrder extends HttpServlet {
             String customer_email = request.getParameter("email");
             String booking_date = request.getParameter("booking_date");
             String booking_period = request.getParameter("booking_period");
-            double booking_price = Double.parseDouble(request.getParameter("booking_price"));
+            String booking_price = request.getParameter("booking_price");
             String note = request.getParameter("note");
             
             
@@ -58,18 +58,14 @@ public class ProcessOrder extends HttpServlet {
             out.println("<body>");           
             
             
-            
+            out.println("hello");
             
             if (!dbac.makeConnection()){
                 out.println("<h2>Could not make a connection :(</h2>");
                 out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
             }
            
-                
-            
-            
-
-            
+    
             out.println("</body>");
             out.println("</html>");
         } finally {
