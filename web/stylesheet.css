@@ -1,3 +1,5 @@
+
+
 .button
 {
 border-style: outset;
@@ -38,7 +40,37 @@ margin:0px;
 padding: 20px;
 }
 
-body
-{
+.body{
 background-color: white;
+}
+
+table.box-left{
+position:fixed;
+top:250px;
+right:5px;
+color:white;
+border-width: medium;
+border-color: grey;
+background-color: rgb(0,36,125);
+margin:0px;
+padding:2px;
+}
+
+table.box-right{
+position:fixed;
+top:200px;
+right:5px;
+color:white;
+border-width: medium;
+border-color: grey;
+background-color: rgb(0,36,125);
+margin:0px;
+padding:2px;
+}
+
+.h1{
+font-family:"Arial", Sans-serif;
+font-size:20px;
+font-weight: normal;
+text-transform: uppercase;
 }
