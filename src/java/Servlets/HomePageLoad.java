@@ -38,6 +38,15 @@ public class HomePageLoad extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             
+            String message = "Greeting adagg";
+            request.setAttribute("message", message); // This will be available as ${message}
+            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+            
+            
+            
+            
+            
+            /*
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -52,6 +61,8 @@ public class HomePageLoad extends HttpServlet {
             out.println("<p><a href= \"BikeGallery.html\" class = \"button\">Click to view information on Bikes</a></p>");          
             out.println("</body>");
             out.println("</html>");
+            
+            */
         } finally {
             out.close();
         }
@@ -68,7 +79,7 @@ public class HomePageLoad extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {                  
         processRequest(request, response);
     }
 
