@@ -45,9 +45,9 @@ background-color: white;
 }
 
 table.box-left{
-position:fixed;
-top:250px;
-right:5px;
+position:relative;
+top:-500px;
+left: 50px;
 color:white;
 border-width: medium;
 border-color: grey;
@@ -57,9 +57,9 @@ padding:2px;
 }
 
 table.box-right{
-position:fixed;
-top:200px;
-right:5px;
+position:relative;
+top:50px;
+right: -1100px;
 color:white;
 border-width: medium;
 border-color: grey;
