@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import otherClasses.DataBaseAccess;
 
 /**
  *
@@ -38,15 +39,8 @@ public class HomePageLoad extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             
-            String message = "Greeting adagg";
-            request.setAttribute("message", message); // This will be available as ${message}
-            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+            DataBaseAccess dbac = new DataBaseAccess();
             
-            
-            
-            
-            
-            /*
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -54,15 +48,54 @@ public class HomePageLoad extends HttpServlet {
             out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");  
             out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");  
             out.println("</head>");
-            
             out.println("<body>");
-            out.println("<h1>Welcome to the Hiring Bikes website</h1>");  
-            out.println("<p><a href= \"ProcessOrder\" class =\"button\">Click to Book a Bike</a></p>"); 
-            out.println("<p><a href= \"BikeGallery.html\" class = \"button\">Click to view information on Bikes</a></p>");          
+            
+            
+            if (!dbac.makeConnection()){
+                out.println("<h1>Could not connect to the database :(</h1>");                        
+                out.println("</body>");
+                out.println("</html>");
+                return;
+            }
+            
+            String [] bike_types = {"womens_mtb","mens_mtb","childs_mtb","womens_hybrid","mens_hybrid","tandem"};
+            
+            
+            out.println("<script>");
+            out.println("var numBikeType = new Array();");
+            out.println("var BikeType = new Array();");
+            for (int i = 0;i<bike_types.length;i++){
+               dbac.doQuery("select count(bike_type) from bike where bike_type='"+bike_types[i]+"';");
+               dbac.nextRow();
+               out.println("BikeType["+i+"] = '"+ bike_types[i] +"';");
+               out.println("numBikeType["+i+"] = "+ Integer.parseInt(dbac.getResult("count")) +";");                                 
+            }
+            
+            String q1 = "select bike.bike_type,booked_bike.booking_id from bike inner join booked_bike on bike.bike_id=booked_bike.bike_id";
+            String q2 = "select booking.booking_date,booking.booking_period,table2.bike_type from booking inner join ("+q1+") AS table2 on booking.booking_id=table2.booking_id;";
+            
+            dbac.doQuery(q2);
+            out.println("var booking_bike_type = new Array()");
+            out.println("var booking_date = new Array()");
+            out.println("var booking_period = new Array()");
+            int i = 0;
+            while (dbac.nextRow()==1){
+                out.println("booking_bike_type["+i+"] = '"+ dbac.getResult("bike_type") +"';");
+                out.println("booking_date["+i+"] = '"+ dbac.getResult("booking_date") +"';");
+                out.println("booking_period["+i+"] = '"+ dbac.getResult("booking_period") +"';");
+                i++;
+            }
+            out.println("document.write(booking_bike_type[4]);");
+            out.println("</script>"); 
+            
+            
+            
+            
+               
             out.println("</body>");
             out.println("</html>");
             
-            */
+            
         } finally {
             out.close();
         }

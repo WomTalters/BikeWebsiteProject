@@ -122,7 +122,7 @@ public class ProcessOrder extends HttpServlet {
             
             
                     
-            while (dbac.nextRow()){
+            while (dbac.nextRow()==1){
                 
             }
             

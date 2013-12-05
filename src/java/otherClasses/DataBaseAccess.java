@@ -74,16 +74,21 @@ public class DataBaseAccess {
         return true;
     }
     
-    public boolean nextRow(){
+    public int nextRow(){
         if (resultSet==null){
-            return false;
+            return 0;
         }
         
         try {
-            return resultSet.next();
+            if(resultSet.next()){
+                return 1;
+            }else{
+                return 3;
+            }
         } catch (SQLException ex) {
-            return false;
+            return 2;
         }        
+        
     }
     
     public String getResult(String column){
