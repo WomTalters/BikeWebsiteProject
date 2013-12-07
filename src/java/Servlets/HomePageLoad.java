@@ -46,7 +46,8 @@ public class HomePageLoad extends HttpServlet {
             out.println("<head>");
             out.println("<title>Hiring Bikes Homepage</title>");
             out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");  
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");  
+            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">"); 
+            out.println("<script src=\"hps.js\"></script>");
             out.println("</head>");
             out.println("<body>");
             
@@ -62,13 +63,15 @@ public class HomePageLoad extends HttpServlet {
             
             
             out.println("<script>");
+            
+            
             out.println("var numBikeType = new Array();");
-            out.println("var BikeType = new Array();");
-            for (int i = 0;i<bike_types.length;i++){
-               dbac.doQuery("select count(bike_type) from bike where bike_type='"+bike_types[i]+"';");
+            out.println("var bikeType = new Array();");
+            for (int j = 0;j<bike_types.length;j++){
+               dbac.doQuery("select count(bike_type) from bike where bike_type='"+bike_types[j]+"';");
                dbac.nextRow();
-               out.println("BikeType["+i+"] = '"+ bike_types[i] +"';");
-               out.println("numBikeType["+i+"] = "+ Integer.parseInt(dbac.getResult("count")) +";");                                 
+               out.println("bikeType["+j+"] = '"+ bike_types[j] +"';");
+               out.println("numBikeType["+j+"] = "+ Integer.parseInt(dbac.getResult("count")) +";");                                 
             }
             
             String q1 = "select bike.bike_type,booked_bike.booking_id from bike inner join booked_bike on bike.bike_id=booked_bike.bike_id";
@@ -85,12 +88,37 @@ public class HomePageLoad extends HttpServlet {
                 out.println("booking_period["+i+"] = '"+ dbac.getResult("booking_period") +"';");
                 i++;
             }
-            out.println("document.write(booking_bike_type[4]);");
+            
+            
+            
+            
             out.println("</script>"); 
             
+            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Shop</h1>");
+            out.println("Year<input value=\"2013\" type=\"text\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
+            out.println("Month<input value=\"1\" type=\"text\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
+            out.println("Day<input value=\"1\" type=\"text\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
+            out.println("Period<select id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
             
+            out.println("<table class=\"bikeChoice\">");
+            for (int j = 0;j<bike_types.length;j++){
+                out.println("<tr>");
+                out.println("<td>");
+                out.println(bike_types[j]);
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<img class=\"bikePic\" src=\""+ bike_types[j] +".jpg\">");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<text id=\"numberOf"+bike_types[j]+"\">0</text>");
+                out.println("</td>");
+                out.println("</tr>");
+            }
             
+           
             
+            out.println("");
+            out.println("</table>");
                
             out.println("</body>");
             out.println("</html>");
