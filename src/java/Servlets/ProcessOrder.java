@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -39,95 +40,113 @@ public class ProcessOrder extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
+
+            DataBaseAccess dbac = new DataBaseAccess(out);
+
+            boolean badOrder = false;
+            String[] bike_types = {"womens_mtb", "mens_mtb", "childs_mtb", "womens_hybrid", "mens_hybrid", "tandem"};
+            String[] numSelectedOfBikeTypes = new String[bike_types.length];
             
-            DataBaseAccess dbac = new DataBaseAccess();
+
+            for (int i = 0; i < bike_types.length; i++) {
+                numSelectedOfBikeTypes[i] = request.getParameter("selectNumOf" + bike_types[i]);
+            }
+
+            String day = request.getParameter("day");
+            String month = request.getParameter("month");
+            String year = request.getParameter("year");
+            String period = request.getParameter("period");
             
-            String customer_email = request.getParameter("email");
-            String booking_day = request.getParameter("booking_day");
-            String booking_month = request.getParameter("booking_month");
-            String booking_year = request.getParameter("booking_year");
-            String booking_period = request.getParameter("booking_period");
-            int num_biketypes = Integer.parseInt(request.getParameter("num_biketypes"));     
-            String note = request.getParameter("note");
-            
-            String date = booking_day + "/" + booking_month + "/" + booking_year;
-            
+            out.println(day);
+
+            String date = year + "-" + month + "-" + day;
+
+            String email = request.getParameter("email");
+
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Payment information</title>");            
+            out.println("<title>Payment information</title>");
             out.println("</head>");
-            out.println("<body>");           
-            
-            
-            out.println("hello");
-            
-            
-            if (!dbac.makeConnection()){
+            out.println("<body>");
+
+            out.println(email);
+
+            if (!dbac.makeConnection()) {
                 out.println("<h2>Could not make a connection :(</h2>");
                 out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
                 out.println("</body>");
                 out.println("</html>");
                 return;
             }
-            
-            
-            
-            for (int i =0;i<num_biketypes;i++){
+
+            for (int i = 0; i < bike_types.length; i++) {
                 
                 
-                String bikemodel = request.getParameter("bikemodel_" + i);
-                int number_ordered = Integer.parseInt(request.getParameter("num_ordered_" + i));
-                
-                
-                //add something for servicing later. Should probably change this. worth checking thourougly
-                //this selects a bike that is either not in the booking table or in the booking table but booked for a different time or date
-                dbac.doQuery("SELECT COUNT(bike_id) FROM bike WHERE (bike_id NOT IN (SELECT bike_id FROM booked_bike) OR bike_id NOT IN (SELECT bike_id FROM booked_bike WHERE booking_id IN (SELECT booking_id FROM booking WHERE booking_date='"+date+"' AND (booking_period='"+booking_period+"' OR booking_period='ALL')) )) AND  model="+bikemodel+";");
-                               
-                //checking avaliblity of bikes
-                if (number_ordered > Integer.parseInt(dbac.getResult("COUNT(bike_id)"))){
-                   
-                    out.println("<h2>One or more of the bikes you requested has become unvailable since you loaded up the booking page:(</h2>");
-                    out.println("<a href=\"HomePageLoad\">Please go back to the booking page and try again</a>");                    
-                    out.println("</body>");
-                    out.println("</html>");
-                    return;                                       
-                }                              
+                if (Integer.parseInt(numSelectedOfBikeTypes[i]) != 0) {
+                    String q1 = "select bike.bike_type,booked_bike.booking_id,booked_bike.bike_id from bike inner join booked_bike on bike.bike_id=booked_bike.bike_id where bike.bike_type='" + bike_types[i] + "'";
+                    String q2 = "select booking.booking_date,booking.booking_period,table2.bike_type,table2.bike_id from booking inner join (" + q1 + ") AS table2 on booking.booking_id=table2.booking_id;";
+                    dbac.doQuery(q2);
+                    int n = 0;
+                    while (dbac.nextRow() == 1) {
+                        String s = dbac.getResult("booking_period");
+                        String s2 = dbac.getResult("booking_date");
+                        if (!(s2.equals(date) && (s.equals(period) || s.equals("ALL") || period.equals("ALL")))) {
+                            n++;
+                            
+                        }
+                    }
+                    if (Integer.parseInt(numSelectedOfBikeTypes[i]) > n) {
+                        badOrder = true;
+                        break;
+                    }
+                }
             }
-            
-            
-            for (int i =0;i<num_biketypes;i++){
+
+            if (badOrder) {
+                out.println("<h1>Bad Order</h1>");
+                out.println("<p>One of the bikes you selected has just become unavalible, please go back to the homePage and try again</p>");
+            } else {
                 
                 
-                String bikemodel = request.getParameter("bikemodel_" + i);
-                int number_ordered = Integer.parseInt(request.getParameter("num_ordered_" + i));
-                
-                
-                //add something for servicing later. Should probably change this. worth checking thourougly
-                
-                dbac.doQuery("SELECT bike_id FROM bike WHERE (bike_id NOT IN (SELECT bike_id FROM booked_bike) OR bike_id NOT IN (SELECT bike_id FROM booked_bike WHERE booking_id IN (SELECT booking_id FROM booking WHERE booking_date='"+date+"' AND (booking_period='"+booking_period+"' OR booking_period='ALL')) )) AND  model="+bikemodel+";");
-                               
-                for (int j = number_ordered;j>=0;j--){
-                    //dbac.doUpdate("INSERT INTO booked_bike VALUES ()")
-                    dbac.getResult("bike_id");
+                double amount = 0;
+                for (int i = 0; i < bike_types.length; i++) {
+                    dbac.doQuery("select * from rates where bike_type='"+bike_types[i]+"';");
+                    
+                    dbac.nextRow();
+                    String all = "ALL";
+                    if (all.equals(period)){
+                        amount += Double.parseDouble(dbac.getResult("day"))*Integer.parseInt(numSelectedOfBikeTypes[i]);
+                        
+                    }else{
+                        amount += Double.parseDouble(dbac.getResult("half"))*Integer.parseInt(numSelectedOfBikeTypes[i]);
+                        
+                    }
                     
                     
                 }
-                                        
-            }
-            
-            
-            
-            
-            
-            
-                    
-            while (dbac.nextRow()==1){
+                
+                dbac.doUpdate("insert into booking (booking_id,customer_email,booking_date,booking_period,amount) values (9991,'"+email+"','"+date+"','"+period+"','"+amount+"');");
+                out.println("yarr");
+                for (int i = 0; i < bike_types.length; i++) {
+                    for (int j = 0; j < Integer.parseInt(numSelectedOfBikeTypes[i]); j++) {
+                        dbac.doUpdate("insert into booked_bike (booking_id,bike_id) values (9991,(select table2.bike_id from booking inner join (select bike.bike_type,booked_bike.booking_id,booked_bike.bike_id from bike inner join booked_bike on bike.bike_id=booked_bike.bike_id where bike.bike_type='" +
+                                bike_types[i] + "') AS table2 on booking.booking_id=table2.booking_id where (booking.booking_date='"+date+"' and (booking.booking_period='"+period
+                                +"' or booking.booking_period='ALL' or 'ALL'='"+period+"'))=false limit 1)) ;");
+                    }
+                }
+                
                 
             }
             
-             
+/*
+            dbac.doQuery("select count(customer_email) from customer where customer_email=" + email + ";");
+            dbac.nextRow();
+            if (Integer.parseInt(dbac.getResult("count")) == 1) {
 
+            }
+            dbac.closeConnection();
+*/
             out.println("</body>");
             out.println("</html>");
         } finally {

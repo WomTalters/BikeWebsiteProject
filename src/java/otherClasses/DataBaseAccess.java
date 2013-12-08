@@ -2,6 +2,7 @@
 
 package otherClasses;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -25,6 +26,11 @@ public class DataBaseAccess {
     Connection connection;
     Statement statement;
     ResultSet resultSet;
+    PrintWriter p;
+    
+    public DataBaseAccess(PrintWriter p){
+        this.p = p;
+    }
     
     
     
@@ -41,6 +47,7 @@ public class DataBaseAccess {
             connection = DriverManager.getConnection(DatabaseURL,DatabaseUserName,DatabasePassword);
             statement = connection.createStatement();
         }catch (SQLException ex){
+            ex.printStackTrace();
             return false;
         }
               
@@ -56,6 +63,9 @@ public class DataBaseAccess {
             statement.executeQuery(query);
             resultSet = statement.getResultSet();
         } catch (SQLException ex) {
+            ex.printStackTrace(p);
+            p.println("<br/>--------------------------<br/>");
+            p.println(query);
             return false;
         }        
         return true;
@@ -69,6 +79,9 @@ public class DataBaseAccess {
         try {
             statement.executeUpdate(update);
         } catch (SQLException ex) {
+            ex.printStackTrace(p);
+            p.println("<br/>--------------------------<br/>");
+            p.println(update);
             return false;
         }        
         return true;

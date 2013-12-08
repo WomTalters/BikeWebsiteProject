@@ -45,7 +45,7 @@ function dateChange(){
     
     var numBooked = new Array();
     for (var j = 0;j<bikeType.length;j++){
-        numBooked[j] = 0;
+        numBooked[j] = numBikeType[j];
     }
     
    
@@ -60,7 +60,7 @@ function dateChange(){
                 
                 if (bikeType[k] === booking_bike_type[j]){
                     
-                    numBooked[k]= numBooked[k]+1;
+                    numBooked[k]= numBooked[k]-1;
                 }
             }      
         }
