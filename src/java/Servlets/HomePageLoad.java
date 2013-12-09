@@ -62,7 +62,7 @@ public class HomePageLoad extends HttpServlet {
             }
             
             String [] bike_types = {"womens_mtb","mens_mtb","childs_mtb","womens_hybrid","mens_hybrid","tandem"};
-            
+            String [] bike_typesp = {"Womens mountain bike","Mens mountain bike","Childs mountain bike","Womens hybrid","Mens hybrid","Tandem"};
             
             out.println("<script>");
             
@@ -96,12 +96,14 @@ public class HomePageLoad extends HttpServlet {
             
             out.println("</script>"); 
             
-            out.println("<form action=\"ProcessOrder\" method=\"POST\"><table class=\"bikeChoice\">");            
+            out.println("<p><form action=\"ProcessOrder\" method=\"POST\"><table class=\"bikeChoice\">");   
+             
             out.println("Year<input value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
             out.println("Month<input value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
             out.println("Day<input value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
             out.println("Period<select name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
-            
+            out.println("email address<input type=\"text\" name=\"email\">");
+            out.println("<input type=\"submit\" value=\"submit\"><p>"); 
             out.println("<table class=\"selectionTable\">");
             out.println("<tr>");
             out.println("<td class=\"selectionElement\">");
@@ -120,7 +122,7 @@ public class HomePageLoad extends HttpServlet {
             for (int j = 0;j<bike_types.length;j++){
                 out.println("<tr>");
                 out.println("<td>");
-                out.println(bike_types[j]);
+                out.println(bike_typesp[j]);
                 out.println("</td>");
                 out.println("<td class=\"selectionElement\">");
                 out.println("<img class=\"bikePic\" src=\""+ bike_types[j] +".jpg\">");
@@ -138,8 +140,7 @@ public class HomePageLoad extends HttpServlet {
             
             
             
-            out.println("email address<input type=\"text\" name=\"email\">");
-            out.println("<input type=\"submit\" value=\"submit\">");   
+            
             out.println("</form>");
             out.println("<script>dateChange();</script>");
             

@@ -116,7 +116,7 @@ public class PaymentDetails extends HttpServlet {
            
             out.println("<br/> <a href=\"HomePageLoad\">Back to home page</a>");
             
-            
+            dbac.closeConnection();
             out.println("</body>");
             out.println("</html>");
         } finally {
