@@ -66,6 +66,7 @@ public class DataBaseAccess {
             ex.printStackTrace(p);
             p.println("<br/>--------------------------<br/>");
             p.println(query);
+            p.println("<br/>--------------------------<br/>");
             return false;
         }        
         return true;
@@ -77,11 +78,12 @@ public class DataBaseAccess {
         }
         
         try {
-            statement.executeUpdate(update);
+            statement.executeUpdate(update);  
         } catch (SQLException ex) {
             ex.printStackTrace(p);
             p.println("<br/>--------------------------<br/>");
             p.println(update);
+            p.println("<br/>--------------------------<br/>");
             return false;
         }        
         return true;

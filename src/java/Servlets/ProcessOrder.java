@@ -7,11 +7,6 @@ package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,28 +35,21 @@ public class ProcessOrder extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-
-            DataBaseAccess dbac = new DataBaseAccess(out);
-
-            boolean badOrder = false;
-            String[] bike_types = {"womens_mtb", "mens_mtb", "childs_mtb", "womens_hybrid", "mens_hybrid", "tandem"};
-            String[] numSelectedOfBikeTypes = new String[bike_types.length];
-            
-
-            for (int i = 0; i < bike_types.length; i++) {
-                numSelectedOfBikeTypes[i] = request.getParameter("selectNumOf" + bike_types[i]);
-            }
-
             String day = request.getParameter("day");
             String month = request.getParameter("month");
             String year = request.getParameter("year");
             String period = request.getParameter("period");
-            
-            out.println(day);
+            String email = request.getParameter("email");
+
+            DataBaseAccess dbac = new DataBaseAccess(out);
 
             String date = year + "-" + month + "-" + day;
 
-            String email = request.getParameter("email");
+            String[] bike_types = {"womens_mtb", "mens_mtb", "childs_mtb", "womens_hybrid", "mens_hybrid", "tandem"};
+            String[] numSlcBT = new String[bike_types.length];
+            for (int i = 0; i < bike_types.length; i++) {
+                numSlcBT[i] = request.getParameter("selectNumOf" + bike_types[i]);
+            }
 
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -69,9 +57,8 @@ public class ProcessOrder extends HttpServlet {
             out.println("<title>Payment information</title>");
             out.println("</head>");
             out.println("<body>");
-
-            out.println(email);
-
+            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Shop</h1>");
+            
             if (!dbac.makeConnection()) {
                 out.println("<h2>Could not make a connection :(</h2>");
                 out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
@@ -80,73 +67,146 @@ public class ProcessOrder extends HttpServlet {
                 return;
             }
 
+            /*
+             checks if enough bikes are avaliable. 
+             If there is an incefeciant number of any bike type requested, 
+             the html page is ended with a warning message 
+             and the the servelet stops.
+             */
             for (int i = 0; i < bike_types.length; i++) {
-                
-                
-                if (Integer.parseInt(numSelectedOfBikeTypes[i]) != 0) {
-                    String q1 = "select bike.bike_type,booked_bike.booking_id,booked_bike.bike_id from bike inner join booked_bike on bike.bike_id=booked_bike.bike_id where bike.bike_type='" + bike_types[i] + "'";
-                    String q2 = "select booking.booking_date,booking.booking_period,table2.bike_type,table2.bike_id from booking inner join (" + q1 + ") AS table2 on booking.booking_id=table2.booking_id;";
-                    dbac.doQuery(q2);
-                    int n = 0;
-                    while (dbac.nextRow() == 1) {
-                        String s = dbac.getResult("booking_period");
-                        String s2 = dbac.getResult("booking_date");
-                        if (!(s2.equals(date) && (s.equals(period) || s.equals("ALL") || period.equals("ALL")))) {
-                            n++;
-                            
-                        }
-                    }
-                    if (Integer.parseInt(numSelectedOfBikeTypes[i]) > n) {
-                        badOrder = true;
-                        break;
-                    }
-                }
-            }
-
-            if (badOrder) {
-                out.println("<h1>Bad Order</h1>");
-                out.println("<p>One of the bikes you selected has just become unavalible, please go back to the homePage and try again</p>");
-            } else {
-                
-                
-                double amount = 0;
-                for (int i = 0; i < bike_types.length; i++) {
-                    dbac.doQuery("select * from rates where bike_type='"+bike_types[i]+"';");
-                    
+                if (Integer.parseInt(numSlcBT[i]) != 0) {
+                    /*
+                     This query gets the number of bikes of a certain type that 
+                     are not booked on the requested booking date and period.                     
+                     */
+                    dbac.doQuery(""
+                            + "SELECT COUNT(table2.bike_type) "
+                            + "FROM booking"
+                            + "     INNER JOIN (SELECT bike.bike_type,"
+                            + "                        booked_bike.booking_id,"
+                            + "                        booked_bike.bike_id"
+                            + "                 FROM   bike"
+                            + "                        INNER JOIN booked_bike"
+                            + "                        ON         bike.bike_id = booked_bike.bike_id"
+                            + "                 WHERE  bike.bike_type = '" + bike_types[i] + "'"
+                            + "                )AS table2"
+                            + "     ON booking.booking_id = table2.booking_id "
+                            + "WHERE (booking.booking_date = '" + date + "'"
+                            + "       AND (booking.booking_period = '" + period + "'"
+                            + "            OR  booking.booking_period='ALL'"
+                            + "            OR  'ALL' = '" + period + "'"
+                            + "           )"
+                            + "      )=false;"
+                            + "");
                     dbac.nextRow();
-                    String all = "ALL";
-                    if (all.equals(period)){
-                        amount += Double.parseDouble(dbac.getResult("day"))*Integer.parseInt(numSelectedOfBikeTypes[i]);
-                        
-                    }else{
-                        amount += Double.parseDouble(dbac.getResult("half"))*Integer.parseInt(numSelectedOfBikeTypes[i]);
-                        
-                    }
-                    
-                    
-                }
-                
-                dbac.doUpdate("insert into booking (booking_id,customer_email,booking_date,booking_period,amount) values (9991,'"+email+"','"+date+"','"+period+"','"+amount+"');");
-                out.println("yarr");
-                for (int i = 0; i < bike_types.length; i++) {
-                    for (int j = 0; j < Integer.parseInt(numSelectedOfBikeTypes[i]); j++) {
-                        dbac.doUpdate("insert into booked_bike (booking_id,bike_id) values (9991,(select table2.bike_id from booking inner join (select bike.bike_type,booked_bike.booking_id,booked_bike.bike_id from bike inner join booked_bike on bike.bike_id=booked_bike.bike_id where bike.bike_type='" +
-                                bike_types[i] + "') AS table2 on booking.booking_id=table2.booking_id where (booking.booking_date='"+date+"' and (booking.booking_period='"+period
-                                +"' or booking.booking_period='ALL' or 'ALL'='"+period+"'))=false limit 1)) ;");
+                    //ends the servlet if the number of a certain bike type requested is less than the availble number 
+                    if (Integer.parseInt(numSlcBT[i]) > Integer.parseInt(dbac.getResult("count"))) {
+                        out.println("<h1>Bad Order</h1>");
+                        out.println(""
+                                + "<p>One of the bikes you selected has just become "
+                                + "unavalible, please go back to the "
+                                + "homePage and try again</p>"
+                                + "");
+                        out.println("</body>");
+                        out.println("</html>");
+                        return;
                     }
                 }
-                
-                
             }
-            
-/*
-            dbac.doQuery("select count(customer_email) from customer where customer_email=" + email + ";");
-            dbac.nextRow();
-            if (Integer.parseInt(dbac.getResult("count")) == 1) {
 
+            /*
+             Calculates the cost of the order            
+             */
+            double amount = 0;
+            for (int i = 0; i < bike_types.length; i++) {
+                dbac.doQuery(""
+                        + "SELECT day,"
+                        + "       half "
+                        + "FROM   rates "
+                        + "WHERE  bike_type = '" + bike_types[i] + "';"
+                        + "");
+                dbac.nextRow();
+                String all = "ALL";
+                if (all.equals(period)) {
+                    amount += Double.parseDouble(dbac.getResult("day")) * Integer.parseInt(numSlcBT[i]);
+                } else {
+                    amount += Double.parseDouble(dbac.getResult("half")) * Integer.parseInt(numSlcBT[i]);
+                }
             }
-            dbac.closeConnection();
-*/
+
+            //Make a new booking number by getting the current biggest one and adding 1 to it
+            dbac.doQuery(""
+                    + "SELECT MAX(booking_id) "
+                    + "FROM   booking;"
+                    + "");
+            dbac.nextRow();
+            int booking_id = Integer.parseInt(dbac.getResult("max")) + 1;
+            //update booking table
+            dbac.doUpdate(""
+                    + "INSERT INTO booking "
+                    + "           (booking_id,"
+                    + "            customer_email,"
+                    + "            booking_date,"
+                    + "            booking_period,"
+                    + "            amount) "
+                    + "VALUES ('" + booking_id + "',"
+                    + "        '" + email + "',"
+                    + "        '" + date + "',"
+                    + "        '" + period + "',"
+                    + "        '" + amount + "'"
+                    + "       );"
+                    + "");
+            //update booked_bike table
+            
+            //SELECTS THE SAME BIKE ID EVERY TIME
+            
+            for (int i = 0; i < bike_types.length; i++) {
+                for (int j = 0; j < Integer.parseInt(numSlcBT[i]); j++) {
+                    dbac.doUpdate(""
+                            + "INSERT INTO booked_bike "
+                            + "           (booking_id,"
+                            + "            bike_id) "
+                            + "VALUES (" + booking_id + ","
+                            + "         (SELECT table2.bike_id "
+                            + "          FROM booking "
+                            + "               INNER JOIN (SELECT bike.bike_type,"
+                            + "                                  booked_bike.booking_id,"
+                            + "                                  booked_bike.bike_id "
+                            + "                           FROM   bike "
+                            + "                                  INNER JOIN booked_bike "
+                            + "                                  ON         bike.bike_id=booked_bike.bike_id "
+                            + "                           WHERE  bike.bike_type='"+ bike_types[i] + "'"
+                            + "                          )"
+                            + "               AS table2 "
+                            + "               ON booking.booking_id=table2.booking_id "
+                            + "          WHERE (booking.booking_date='" + date + "'"
+                            + "          AND     (booking.booking_period='" + period+ "'"
+                            + "                   OR   booking.booking_period='ALL'"
+                            + "                   OR   'ALL'='" + period + "'"
+                            + "                  )"
+                            + "                )=false"
+                            + "          LIMIT 1"
+                            + "         )"
+                            + "       );"
+                            + "");                                        
+                }
+            }
+
+            
+             dbac.doQuery(""
+                     + "SELECT COUNT(customer_email) "
+                     + "FROM customer "
+                     + "WHERE customer_email='" + email + "';"
+                     + "");
+             dbac.nextRow();
+             if (Integer.parseInt(dbac.getResult("count")) == 1) {
+                 
+                 out.println("<p>We already have your payment details<p>");                 
+             }else{
+                 out.println("<p>You need to enter your payment details<p>");
+             }
+             dbac.closeConnection();
+             
             out.println("</body>");
             out.println("</html>");
         } finally {

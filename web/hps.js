@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-var day = 1;
-var month = 1;
-var year = 2013;
-var sDay ='1';
-var sMonth = '1';
-var sYear = '2013';
+var today = new Date();
+var day = today.getDate();
+var month = today.getMonth() +1;
+var year = today.getFullYear();
+var sDay = day.toString();
+var sMonth = month.toString();
+var sYear = year.toString();
 var sDate;
 var sPeriod;
 
@@ -20,6 +20,7 @@ var leapYear = false;
 
 
 function dateChange(){
+    
     
     switch (document.getElementById("period").selectedIndex){
         case 0:
@@ -67,6 +68,9 @@ function dateChange(){
         
         
     }
+    document.getElementById("day").value = sDay;
+    document.getElementById("month").value = sMonth;
+    document.getElementById("year").value = sYear;
     
     
     for (var j =0;j<bikeType.length;j++){
@@ -77,7 +81,8 @@ function dateChange(){
 }
 
 function dateDayChange(){
-      
+    
+    
     if (checkInput(2,"day")){
         sDay = document.getElementById("day").value;
         day = parseInt(sDay);

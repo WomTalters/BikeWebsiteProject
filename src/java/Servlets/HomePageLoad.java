@@ -93,37 +93,54 @@ public class HomePageLoad extends HttpServlet {
             
             
             out.println("</script>"); 
-            out.println("<form action=\"ProcessOrder\" method=\"POST\"><table class=\"bikeChoice\">");
             out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Shop</h1>");
-            out.println("Year<input value=\"2013\" type=\"text\" name=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
-            out.println("Month<input value=\"1\" type=\"text\" name=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
-            out.println("Day<input value=\"1\" type=\"text\" name=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
-            out.println("Period<select name=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
+            out.println("<form action=\"ProcessOrder\" method=\"POST\"><table class=\"bikeChoice\">");            
+            out.println("Year<input value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
+            out.println("Month<input value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
+            out.println("Day<input value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
+            out.println("Period<select name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
             
-            
+            out.println("<table class=\"selectionTable\">");
+            out.println("<tr>");
+            out.println("<td class=\"selectionElement\">");
+            out.println("Bike Type");
+            out.println("</td>");
+            out.println("<td class=\"selectionElement\">");
+            out.println("Bike Image");
+            out.println("</td>");
+            out.println("<td class=\"selectionElement\">");
+            out.println("Number avalible");
+            out.println("</td>");
+            out.println("<td class=\"selectionElement\">");
+            out.println("Number selected");
+            out.println("</td>");
+            out.println("</tr>");
             for (int j = 0;j<bike_types.length;j++){
                 out.println("<tr>");
                 out.println("<td>");
                 out.println(bike_types[j]);
                 out.println("</td>");
-                out.println("<td>");
+                out.println("<td class=\"selectionElement\">");
                 out.println("<img class=\"bikePic\" src=\""+ bike_types[j] +".jpg\">");
                 out.println("</td>");
-                out.println("<td>");
+                out.println("<td class=\"selectionElement\">");
                 out.println("<text id=\"numberOf"+bike_types[j]+"\">0</text>");
                 out.println("</td>");
-                out.println("<td>");
+                out.println("<td class=\"selectionElement\">");
                 out.println("<input type=\"text\" value=\"0\" name=\"selectNumOf"+bike_types[j]+"\">");
                 out.println("</td>");
                 out.println("</tr>");
             }
-            
-           
-            
+    
             out.println("</table>");
+            
+            
+            
             out.println("email address<input type=\"text\" name=\"email\">");
             out.println("<input type=\"submit\" value=\"submit\">");   
             out.println("</form>");
+            out.println("<script>dateChange();</script>");
+            
             out.println("</body>");
             out.println("</html>");
             
