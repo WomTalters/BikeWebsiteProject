@@ -74,6 +74,7 @@ public class DataBaseAccess {
     
     public boolean doUpdate(String update){
         if (statement==null){
+            p.println("yo");
             return false;
         }
         

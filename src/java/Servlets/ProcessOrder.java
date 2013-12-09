@@ -54,7 +54,8 @@ public class ProcessOrder extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Payment information</title>");
+            out.println("<title>TC bike hire</title>");
+            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">"); 
             out.println("</head>");
             out.println("<body>");
             out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Shop</h1>");
@@ -80,23 +81,21 @@ public class ProcessOrder extends HttpServlet {
                      are not booked on the requested booking date and period.                     
                      */
                     dbac.doQuery(""
-                            + "SELECT COUNT(table2.bike_type) "
-                            + "FROM booking"
-                            + "     INNER JOIN (SELECT bike.bike_type,"
-                            + "                        booked_bike.booking_id,"
-                            + "                        booked_bike.bike_id"
-                            + "                 FROM   bike"
-                            + "                        INNER JOIN booked_bike"
-                            + "                        ON         bike.bike_id = booked_bike.bike_id"
-                            + "                 WHERE  bike.bike_type = '" + bike_types[i] + "'"
-                            + "                )AS table2"
-                            + "     ON booking.booking_id = table2.booking_id "
-                            + "WHERE (booking.booking_date = '" + date + "'"
-                            + "       AND (booking.booking_period = '" + period + "'"
-                            + "            OR  booking.booking_period='ALL'"
-                            + "            OR  'ALL' = '" + period + "'"
-                            + "           )"
-                            + "      )=false;"
+                            + "SELECT COUNT(bike_id) "
+                            + "FROM bike "
+                            + "WHERE bike_type='"+bike_types[i]+"' "
+                            + "AND bike_id "
+                            + "NOT IN (SELECT booked_bike.bike_id"
+                            + "        FROM booked_bike"
+                            + "        INNER JOIN booking"
+                            + "        ON booked_bike.booking_id=booking.booking_id"
+                            + "        WHERE (booking.booking_date='" + date + "'"
+                            + "               AND     (booking.booking_period='" + period+ "'"
+                            + "               OR   booking.booking_period='ALL'"
+                            + "               OR   'ALL'='" + period + "'"
+                            + "                       )"
+                            + "              )"          
+                            + "       );"
                             + "");
                     dbac.nextRow();
                     //ends the servlet if the number of a certain bike type requested is less than the availble number 
@@ -157,38 +156,34 @@ public class ProcessOrder extends HttpServlet {
                     + "       );"
                     + "");
             //update booked_bike table
-            
-            //SELECTS THE SAME BIKE ID EVERY TIME
+
             
             for (int i = 0; i < bike_types.length; i++) {
                 for (int j = 0; j < Integer.parseInt(numSlcBT[i]); j++) {
+         
                     dbac.doUpdate(""
                             + "INSERT INTO booked_bike "
                             + "           (booking_id,"
                             + "            bike_id) "
                             + "VALUES (" + booking_id + ","
-                            + "         (SELECT table2.bike_id "
-                            + "          FROM booking "
-                            + "               INNER JOIN (SELECT bike.bike_type,"
-                            + "                                  booked_bike.booking_id,"
-                            + "                                  booked_bike.bike_id "
-                            + "                           FROM   bike "
-                            + "                                  INNER JOIN booked_bike "
-                            + "                                  ON         bike.bike_id=booked_bike.bike_id "
-                            + "                           WHERE  bike.bike_type='"+ bike_types[i] + "'"
-                            + "                          )"
-                            + "               AS table2 "
-                            + "               ON booking.booking_id=table2.booking_id "
-                            + "          WHERE (booking.booking_date='" + date + "'"
-                            + "          AND     (booking.booking_period='" + period+ "'"
-                            + "                   OR   booking.booking_period='ALL'"
-                            + "                   OR   'ALL'='" + period + "'"
-                            + "                  )"
-                            + "                )=false"
-                            + "          LIMIT 1"
-                            + "         )"
-                            + "       );"
-                            + "");                                        
+                            + "         (SELECT bike_id "
+                            + "          FROM bike"
+                            + "          WHERE bike_type='"+bike_types[i]+"'"
+                            + "          AND bike_id"
+                            + "          NOT IN (SELECT booked_bike.bike_id"
+                            + "                      FROM booked_bike"
+                            + "                      INNER JOIN booking"
+                            + "                      ON booked_bike.booking_id=booking.booking_id"
+                            + "                      WHERE (booking.booking_date='" + date + "'"
+                            + "                      AND     (booking.booking_period='" + period+ "'"
+                            + "                      OR   booking.booking_period='ALL'"
+                            + "                      OR   'ALL'='" + period + "'"
+                            + "                              )"
+                            + "                            )"          
+                            + "                     )"
+                            + "         LIMIT 1))"
+                            + "       ;"
+                            + ""); 
                 }
             }
 
@@ -201,9 +196,24 @@ public class ProcessOrder extends HttpServlet {
              dbac.nextRow();
              if (Integer.parseInt(dbac.getResult("count")) == 1) {
                  
-                 out.println("<p>We already have your payment details<p>");                 
+                 out.println("<p>We already have your payment details."
+                         + " Your order and payment details and order are shown below"
+                         + " and you can change them at anytime up until the date of hire<p>");                 
              }else{
                  out.println("<p>You need to enter your payment details<p>");
+                 out.println("<form action =\"PaymentDetails\" method=\"POST\">");
+                 out.println("Name: <input type=\"text\" name=\"name\"><br/>");
+                 out.println("Email: <input type=\"text\" value=\""+email+"\" name=\"email\" readonly><br/>");
+                 out.println("Billing adress: <input type=\"text\" name=\"BillAdd\"><br/>");
+                 out.println("Card Type<select name=\"card Type\">");
+                 out.println("<option value=\"V\">Visa</option>");
+                 out.println("<option value=\"MC\">Master Card</option>");
+                 out.println("<option value=\"AE\">American Express</option>");
+                 out.println("</select>");
+                 out.println("Expiry MM/YY: <input type=\"text\" name=\"MM\"><input type=\"text\" name=\"YY\"><br/>");
+                 out.println("Card number: <input type=\"text\" name=\"cardNo\"><br/>");
+                 out.println("<input type=\"submit\" value=\"submit\"><br/>");
+                 out.println("</form>");
              }
              dbac.closeConnection();
              

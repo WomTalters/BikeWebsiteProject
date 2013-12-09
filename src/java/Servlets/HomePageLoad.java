@@ -44,7 +44,7 @@ public class HomePageLoad extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Hiring Bikes Homepage</title>");
+            out.println("<title>TC bike hire</title>");
             out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");  
             out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">"); 
             out.println("<script src=\"hps.js\"></script>");
@@ -140,6 +140,8 @@ public class HomePageLoad extends HttpServlet {
             out.println("<input type=\"submit\" value=\"submit\">");   
             out.println("</form>");
             out.println("<script>dateChange();</script>");
+            
+            dbac.closeConnection();
             
             out.println("</body>");
             out.println("</html>");
