@@ -13,14 +13,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import otherClasses.DataBaseAccess;
+import otherClasses.InputCheck;
 
 /**
  *
  * @author Tom
+ * 
  */
 @WebServlet(name = "ProcessOrder", urlPatterns = {"/ProcessOrder"})
 public class ProcessOrder extends HttpServlet {
+    
+    
 
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -29,19 +34,27 @@ public class ProcessOrder extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * 
+     * 
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            String day = request.getParameter("day");
+            
+            
+            String day = request.getParameter("day");            
             String month = request.getParameter("month");
             String year = request.getParameter("year");
             String period = request.getParameter("period");
             String email = request.getParameter("email");
+            
+            
+             
 
             DataBaseAccess dbac = new DataBaseAccess(out);
+            InputCheck ic = new InputCheck(out);
 
             String date = year + "-" + month + "-" + day;
 
@@ -55,11 +68,37 @@ public class ProcessOrder extends HttpServlet {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>TC bike hire</title>");
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">"); 
+            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Shop</h1>");
+            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Hire</h1>");
             
+            if (!ic.checkNumber(day,2) || !ic.checkNumber(month,2) || !ic.checkNumber(year,4) || !ic.checkEmail(email)){
+                
+                out.println("<h2>Bad input</h2>");
+                out.println("<br/><p>One of the fields was filled in wrong, go back and re-try</p>");
+                out.println("<br/><a href=\"HomePageLoad\">Back to home Page</a>");
+                out.println("</body>");
+                out.println("</html>");
+                return;
+                
+            }
+            
+            for (int i = 0; i < bike_types.length; i++) {
+                if (!ic.checkNumber(numSlcBT[i],-1)){
+                    out.println("<h2>Bad input</h2>");
+                    out.println("<br/><p>One of the fields was filled in wrong, go back and re-try</p>");
+                    out.println("<br/><a href=\"HomePageLoad\">Back to home Page</a>");
+                    out.println("</body>");
+                    out.println("</html>");
+                    return;
+                }
+                
+                 
+            }
+            
+            
+
             if (!dbac.makeConnection()) {
                 out.println("<h2>Could not make a connection :(</h2>");
                 out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
@@ -83,29 +122,30 @@ public class ProcessOrder extends HttpServlet {
                     dbac.doQuery(""
                             + "SELECT COUNT(bike_id) "
                             + "FROM bike "
-                            + "WHERE bike_type='"+bike_types[i]+"' "
+                            + "WHERE bike_type='" + bike_types[i] + "' "
                             + "AND bike_id "
                             + "NOT IN (SELECT booked_bike.bike_id"
                             + "        FROM booked_bike"
                             + "        INNER JOIN booking"
                             + "        ON booked_bike.booking_id=booking.booking_id"
                             + "        WHERE (booking.booking_date='" + date + "'"
-                            + "               AND     (booking.booking_period='" + period+ "'"
+                            + "               AND     (booking.booking_period='" + period + "'"
                             + "               OR   booking.booking_period='ALL'"
                             + "               OR   'ALL'='" + period + "'"
                             + "                       )"
-                            + "              )"          
+                            + "              )"
                             + "       );"
                             + "");
                     dbac.nextRow();
                     //ends the servlet if the number of a certain bike type requested is less than the availble number 
                     if (Integer.parseInt(numSlcBT[i]) > Integer.parseInt(dbac.getResult("count"))) {
-                        out.println("<h1>Bad Order</h1>");
+                        out.println("<h2>Bad Order</h2>");
                         out.println(""
                                 + "<p>One of the bikes you selected has just become "
                                 + "unavalible, please go back to the "
-                                + "homePage and try again</p>"
+                                + "homePage and try again</p>"                                
                                 + "");
+                        out.println("<br/> <a href=\"HomePageLoad\">Back to home page</a>");
                         out.println("</body>");
                         out.println("</html>");
                         return;
@@ -157,10 +197,9 @@ public class ProcessOrder extends HttpServlet {
                     + "");
             //update booked_bike table
 
-            
             for (int i = 0; i < bike_types.length; i++) {
                 for (int j = 0; j < Integer.parseInt(numSlcBT[i]); j++) {
-         
+
                     dbac.doUpdate(""
                             + "INSERT INTO booked_bike "
                             + "           (booking_id,"
@@ -168,55 +207,78 @@ public class ProcessOrder extends HttpServlet {
                             + "VALUES (" + booking_id + ","
                             + "         (SELECT bike_id "
                             + "          FROM bike"
-                            + "          WHERE bike_type='"+bike_types[i]+"'"
+                            + "          WHERE bike_type='" + bike_types[i] + "'"
                             + "          AND bike_id"
                             + "          NOT IN (SELECT booked_bike.bike_id"
                             + "                      FROM booked_bike"
                             + "                      INNER JOIN booking"
                             + "                      ON booked_bike.booking_id=booking.booking_id"
                             + "                      WHERE (booking.booking_date='" + date + "'"
-                            + "                      AND     (booking.booking_period='" + period+ "'"
+                            + "                      AND     (booking.booking_period='" + period + "'"
                             + "                      OR   booking.booking_period='ALL'"
                             + "                      OR   'ALL'='" + period + "'"
                             + "                              )"
-                            + "                            )"          
+                            + "                            )"
                             + "                     )"
                             + "         LIMIT 1))"
                             + "       ;"
-                            + ""); 
+                            + "");
                 }
             }
 
-            
-             dbac.doQuery(""
-                     + "SELECT COUNT(customer_email) "
-                     + "FROM customer "
-                     + "WHERE customer_email='" + email + "';"
-                     + "");
-             dbac.nextRow();
-             if (Integer.parseInt(dbac.getResult("count")) == 1) {
-                 
-                 out.println("<p>We already have your payment details."
-                         + " Your order and payment details and order are shown below"
-                         + " and you can change them at anytime up until the date of hire<p>");                 
-             }else{
-                 out.println("<p>You need to enter your payment details<p>");
-                 out.println("<form action =\"PaymentDetails\" method=\"POST\">");
-                 out.println("Name: <input type=\"text\" name=\"name\"><br/>");
-                 out.println("Email: <input type=\"text\" value=\""+email+"\" name=\"email\" readonly><br/>");
-                 out.println("Billing adress: <input type=\"text\" name=\"BillAdd\"><br/>");
-                 out.println("Card Type<select name=\"card Type\">");
-                 out.println("<option value=\"V\">Visa</option>");
-                 out.println("<option value=\"MC\">Master Card</option>");
-                 out.println("<option value=\"AE\">American Express</option>");
-                 out.println("</select>");
-                 out.println("Expiry MM/YY: <input type=\"text\" name=\"MM\"><input type=\"text\" name=\"YY\"><br/>");
-                 out.println("Card number: <input type=\"text\" name=\"cardNo\"><br/>");
-                 out.println("<input type=\"submit\" value=\"submit\"><br/>");
-                 out.println("</form>");
-             }
-             dbac.closeConnection();
-             
+            dbac.doQuery(""
+                    + "SELECT COUNT(customer_email) "
+                    + "FROM customer "
+                    + "WHERE customer_email='" + email + "';"
+                    + "");
+            dbac.nextRow();
+            if (Integer.parseInt(dbac.getResult("count")) == 1) {
+
+                out.println("<p>We already have your payment details."
+                        + " Your order is shown below<p>");
+                dbac.doQuery("SELECT bike.bike_id,"
+                        + "          bike.bike_type"
+                        + "   FROM bike "
+                        + "   INNER JOIN booked_bike"
+                        + "   ON bike.bike_id=booked_bike.bike_id"
+                        + "   WHERE booking_id='" + booking_id + "'       ;");
+
+                out.println("<table>");
+                while (dbac.nextRow() == 1) {
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println(dbac.getResult("bike_id"));
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println(dbac.getResult("bike_type"));
+                    out.println("</td>");
+                    out.println("</tr>");
+                }
+                out.println("</table>");
+    
+                out.println("<br/> <a href=\"HomePageLoad\">Back to home page</a>");
+                
+                
+                
+            } else {
+                out.println("<p>You need to enter your payment details. Make sure they are correct before submitting<p>");
+                out.println("<form action =\"PaymentDetails\" method=\"POST\">");
+                out.println("Name: <input type=\"text\" name=\"name\"><br/>");
+                out.println("Email: <input type=\"text\" value=\"" + email + "\" name=\"email\" readonly><br/>");
+                out.println("Billing adress: <input type=\"text\" name=\"BillAdd\"><br/>");
+                out.println("Card Type<select name=\"card Type\">");
+                out.println("<option value=\"V\">Visa</option>");
+                out.println("<option value=\"MC\">Master Card</option>");
+                out.println("<option value=\"AE\">American Express</option>");
+                out.println("</select><br/>");
+                out.println("Expiry MM/YY: <input type=\"text\" name=\"MM\"><input type=\"text\" name=\"YY\"><br/>");
+                out.println("Card number: <input type=\"text\" name=\"cardNo\"><br/>");
+                out.println("Booking_id: <input type=\"text\" value=\"" + booking_id + "\" name=\"bId\" readonly><br/>");
+                out.println("<input type=\"submit\" value=\"submit\"><br/>");
+                out.println("</form>");
+            }
+            dbac.closeConnection();
+
             out.println("</body>");
             out.println("</html>");
         } finally {

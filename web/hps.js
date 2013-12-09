@@ -74,7 +74,12 @@ function dateChange(){
     
     
     for (var j =0;j<bikeType.length;j++){
-        document.getElementById("numberOf"+bikeType[j]).innerHTML=numBooked[j];
+        if (numBooked[j] > 0){
+           document.getElementById("numberOf"+bikeType[j]).innerHTML=numBooked[j]; 
+        }else{
+           document.getElementById("numberOf"+bikeType[j]).innerHTML=0; 
+        }
+        
     
     }
     

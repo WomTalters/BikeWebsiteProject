@@ -40,6 +40,8 @@ public class HomePageLoad extends HttpServlet {
         try {
             
             DataBaseAccess dbac = new DataBaseAccess(out);
+           
+            
             
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -50,10 +52,10 @@ public class HomePageLoad extends HttpServlet {
             out.println("<script src=\"hps.js\"></script>");
             out.println("</head>");
             out.println("<body>");
-            
+            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Hire</h1>");
             
             if (!dbac.makeConnection()){
-                out.println("<h1>Could not connect to the database :(</h1>");                        
+                out.println("<h2>Could not connect to the database :(</h2>");                        
                 out.println("</body>");
                 out.println("</html>");
                 return;
@@ -93,7 +95,7 @@ public class HomePageLoad extends HttpServlet {
             
             
             out.println("</script>"); 
-            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Shop</h1>");
+            
             out.println("<form action=\"ProcessOrder\" method=\"POST\"><table class=\"bikeChoice\">");            
             out.println("Year<input value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
             out.println("Month<input value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");

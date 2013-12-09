@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import otherClasses.DataBaseAccess;
+import otherClasses.InputCheck;
 
 /**
  *
@@ -38,6 +39,8 @@ public class PaymentDetails extends HttpServlet {
         try {
             
             DataBaseAccess dbac = new DataBaseAccess(out);
+            InputCheck ic = new InputCheck(out);
+            
             String name = request.getParameter("name");
             String email = request.getParameter("email");
             String billAdd = request.getParameter("BillAdd");
@@ -45,15 +48,27 @@ public class PaymentDetails extends HttpServlet {
             String YY = request.getParameter("YY");
             String MM = request.getParameter("MM");
             String cardNo = request.getParameter("cardNo");
-            
+            String bId = request.getParameter("bId");
             
             
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PaymentDetails</title>");            
+            out.println("<title>TC bike hire</title>");     
+            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");
             out.println("</head>");
             out.println("<body>");
+            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Hire</h1>");
+            
+            if (!ic.checkString(name,48) || !ic.checkString(billAdd,200) ||  !ic.checkNumber(MM,2) ||  !ic.checkNumber(YY,2) || !ic.checkNumber(cardNo,16)){
+                
+                
+                out.println("<h2>Bad input</h2>");
+                out.println("<br/><p>One of the fields was filled in wrong, go back and re-try</p>");
+                out.println("</body>");
+                out.println("</html>");
+                return;
+            }
             
             if (!dbac.makeConnection()) {
                 out.println("<h2>Could not make a connection :(</h2>");
@@ -76,14 +91,30 @@ public class PaymentDetails extends HttpServlet {
             
             
             out.println("<p>payment details have been collected!"
-                    + " Your order and payment details and order are shown below"
-                    + " and you can change them at anytime up until the date of hire<p>");
+                    + " Your order is shown below<p>");
            
+            dbac.doQuery("SELECT bike.bike_id,"
+                    + "          bike.bike_type"
+                    + "   FROM bike "
+                    + "   INNER JOIN booked_bike"
+                    + "   ON bike.bike_id=booked_bike.bike_id"
+                    + "   WHERE booking_id='"+bId+"'       ;");
             
             
-            
-
-            
+            out.println("<table>");
+            while(dbac.nextRow()==1){
+                out.println("<tr>");
+                out.println("<td>");
+                out.println(dbac.getResult("bike_id"));
+                out.println("</td>");
+                out.println("<td>");
+                out.println(dbac.getResult("bike_type"));
+                out.println("</td>");
+                out.println("</tr>");
+            }
+            out.println("</table>");
+           
+            out.println("<br/> <a href=\"HomePageLoad\">Back to home page</a>");
             
             
             out.println("</body>");
