@@ -96,42 +96,42 @@ public class HomePageLoad extends HttpServlet {
             
             out.println("</script>"); 
             
-            out.println("<p><form action=\"ProcessOrder\" method=\"POST\"><table class=\"bikeChoice\">");   
-             
-            out.println("Year<input value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
-            out.println("Month<input value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
-            out.println("Day<input value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
-            out.println("Period<select name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
-            out.println("email address<input type=\"text\" name=\"email\">");
-            out.println("<input type=\"submit\" value=\"submit\"><p>"); 
-            out.println("<table class=\"selectionTable\">");
+            out.println("<form action=\"ProcessOrder\" method=\"POST\">");   
+            out.println("<p class=\"text1\">");
+            out.println("Year:<input class=\"textbox1\" value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
+            out.println("Month:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
+            out.println("Day:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
+            out.println("Period:<select class=\"dropdown1\" name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
+            out.println("Email Address:<input class=\"textbox2\"type=\"text\" name=\"email\">");
+            out.println("<input class =\"button1\"type=\"submit\" value=\"submit\"><p>"); 
+            out.println("<table class=\"box2\">");
             out.println("<tr>");
-            out.println("<td class=\"selectionElement\">");
+            out.println("<td class=\"label1\">");
             out.println("Bike Type");
             out.println("</td>");
-            out.println("<td class=\"selectionElement\">");
+            out.println("<td class=\"label1\">");
             out.println("Bike Image");
             out.println("</td>");
-            out.println("<td class=\"selectionElement\">");
-            out.println("Number avalible");
+            out.println("<td class=\"label1\">");
+            out.println("Number available");
             out.println("</td>");
-            out.println("<td class=\"selectionElement\">");
+            out.println("<td class=\"label1\">");
             out.println("Number selected");
             out.println("</td>");
             out.println("</tr>");
             for (int j = 0;j<bike_types.length;j++){
                 out.println("<tr>");
-                out.println("<td>");
+                out.println("<td class=\"text2\">");
                 out.println(bike_typesp[j]);
                 out.println("</td>");
                 out.println("<td class=\"selectionElement\">");
                 out.println("<img class=\"bikePic\" src=\""+ bike_types[j] +".jpg\">");
                 out.println("</td>");
                 out.println("<td class=\"selectionElement\">");
-                out.println("<text id=\"numberOf"+bike_types[j]+"\">0</text>");
+                out.println("<text class=\"text3\" id=\"numberOf"+bike_types[j]+"\">0</text>");
                 out.println("</td>");
                 out.println("<td class=\"selectionElement\">");
-                out.println("<input type=\"text\" value=\"0\" name=\"selectNumOf"+bike_types[j]+"\">");
+                out.println("<input class=\"textbox3\" type=\"text\" value=\"0\" name=\"selectNumOf"+bike_types[j]+"\">");
                 out.println("</td>");
                 out.println("</tr>");
             }
