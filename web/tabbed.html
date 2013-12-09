@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- the lines above specify all the HTML definitions you'll need for validation -->
+
+<title>Navigation example (after BPWD)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+body {
+	margin: 0;
+	padding: 0;
+	font-size: large;
+	}
+#nav {
+	float: left;
+	width: 50em;
+	margin: 0;
+	padding: 1em 0 0 5em;
+	list-style: none;
+	background: #666;
+	}
+#nav li {
+	float: left;
+	margin: 0 1px 0 0;
+	padding: 0;
+	font-family: "Lucida Grande", sans-serif;
+	font-size: 80%;
+	}
+#nav a {
+	float: left;
+	display: block;
+	margin: 0;
+	padding: .5em 1em;
+	color: #333;
+	text-decoration: none;
+	border-bottom: none;
+	background: #ccc;
+	}
+#nav a:hover, body#intro #t-intro a {
+	color: #333;
+	background: #fff url(images/on_bg.gif) repeat-x top left;
+	}
+	
+		#main {
+		float: left;
+		width: 95%;
+		margin-left: 1em;
+        	padding-left: 1em;
+        	padding-right: 1em;
+		}
+
+</style>
+</head>
+
+<body id="intro">
+
+	<ul id="nav">
+		<li id="t-intro"><a href="#intro">Introduction</a></li>
+		<li id="t-e2"><a href="ex1_text.html">Example1</a></li>
+		<li id="t-e2"><a href="ex2_table.html">Example2</a></li>
+		<li id="t-e3"><a href="ex3_ext.html">Example3: </a></li>
+	</ul>
+<div id="main">
+	
+	<p id="top">The tabs link to some of the example code. This only just scratches the surface of CSS; 
+		some good demonstrations and resources can be found at:
+		<ul>
+			<li class="links"> <a href="http://www.csszengarden.com/">CSS Zen garden</a> 
+			which contains many fabulous examples... </li>
+		</ul>
+</div>
+</body>
+</html>
