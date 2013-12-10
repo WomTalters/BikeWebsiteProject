@@ -293,9 +293,6 @@ text-align:left;
 padding:10px;
 }
 
-
-
-
 .text2
 /* homepage - bike types names, */
 {
@@ -516,10 +513,13 @@ border-color: rgb(0,36,125);
 div.desc
 /* bike gallery - description*/
 {
-  text-align: center;
-  font-weight: normal;
-  width: 350px;
-  margin: 5px;
+font-family:"Arial", Sans-serif;
+font-size:15px;
+padding:10px;
+text-align: center;
+font-weight: normal;
+width: 350px;
+margin: 5px;
 }
 
 .routeImg
