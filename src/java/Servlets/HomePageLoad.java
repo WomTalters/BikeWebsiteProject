@@ -54,10 +54,10 @@ public class HomePageLoad extends HttpServlet {
             out.println("\t<body>");
             out.println("\t\t<h1 class=\"heading\">TC Bike Hire</h1>");
             out.println("\t\t<div class=\"navbar\">");            
-            out.println("\t\t\t<a class=\"button1\" href=\"HomePageLoad\">Home</a>");
-            out.println("\t\t\t<a class=\"button1\" href=\"BikeGallery.html\">Bike gallery</a>");
-            out.println("\t\t\t<a class=\"button1\" href=\"CycleRoutes.html\">Cycle routes</a>");
-            out.println("\t\t\t<a class=\"button1\" href=\"LocCon.html\">General information</a>");
+            out.println("\t\t\t<a class=\"button2\" href=\"HomePageLoad\">Home</a>");
+            out.println("\t\t\t<a class=\"button2\" href=\"BikeGallery.html\">Bike gallery</a>");
+            out.println("\t\t\t<a class=\"button2\" href=\"CycleRoutes.html\">Cycle routes</a>");
+            out.println("\t\t\t<a class=\"button2\" href=\"LocCon.html\">General information</a>");
             out.println("\t\t</div>");
             
             if (!dbac.makeConnection()){
@@ -120,14 +120,14 @@ public class HomePageLoad extends HttpServlet {
             out.println("\t\t</script>"); 
             
             out.println("\t\t<form action=\"ProcessOrder\" method=\"POST\">");   
-            out.println("\t\t\t<p class=\"text1\">");
+            out.println("\t\t\t<p class=\"box1\">");
             out.println("\t\t\t\tYear:<input class=\"textbox1\" value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
             out.println("\t\t\t\tMonth:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
             out.println("\t\t\t\tDay:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
             out.println("\t\t\t\tPeriod:<select class=\"dropdown1\" name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
             out.println("\t\t\t\tEmail Address:<input class=\"textbox2\" type=\"text\" name=\"email\">");
             out.println("\t\t\t\t<input class =\"button1\" type=\"submit\" value=\"submit\">"); 
-            out.println("\t\t\t<p>");
+            out.println("\t\t\t</p>");
             out.println("\t\t\t<table class=\"box2\">");
             out.println("\t\t\t\t<tr>");
             out.println("\t\t\t\t\t<td class=\"label1\">");
@@ -143,6 +143,7 @@ public class HomePageLoad extends HttpServlet {
             out.println("\t\t\t\t\t\tNumber selected");
             out.println("\t\t\t\t\t</td>");
             out.println("\t\t\t\t</tr>");
+            
             for (int j = 0;j<bike_types.length;j++){
                 out.println("\t\t\t\t<tr>");
                 out.println("\t\t\t\t\t<td class=\"text2\">");
