@@ -57,6 +57,34 @@ text-decoration:none;
 
 }
 
+.button3
+{
+/* button1 position */
+display:inline-block;
+float:right;
+/*button1 shape*/
+border-style: solid;
+border-radius: 10px;
+border-width: medium;
+border-color: white;
+background-color: rgb(253,195,1);
+padding-top:10px;
+padding-bottom:10px;
+margin:2px;
+width:40%;
+height:90%;
+/*button1 text*/
+text-transform: uppercase;
+text-align:center;
+font-family:"Arial", Sans-serif;
+font-weight: bold;
+font-style:bold;
+font-size: 100%;
+color: black;
+text-decoration:none;
+
+}
+
 
 .dropdown1
 {
@@ -89,6 +117,26 @@ text-align:center;
 border-radius: 10px;
 border-bottom-left-radius: 0px;
 border-bottom-right-radius:0px;
+border-width: medium;
+border-color: grey;
+background-color: rgb(0,36,125);
+height:100px;
+margin:0px;
+padding: 20px;
+}
+
+.heading1
+{
+/* text style */
+font-family:"Arial", Sans-serif;
+font-size:50px;
+font-weight: bold;
+text-transform: uppercase;
+color: white;
+display:block;
+text-align:center;
+/*border style*/
+border-radius: 10px;
 border-width: medium;
 border-color: grey;
 background-color: rgb(0,36,125);
@@ -163,6 +211,26 @@ background-color: red;
 height:20px;
 width: 1310px;
 padding: 20px;
+}
+
+.box4{
+/* text style */
+font-family:"Arial", Sans-serif;
+font-size:15px;
+font-weight: bold;
+color: white;
+text-transform: uppercase;
+/*border style */
+position: relative;
+top:10px;
+border-radius: 10px;
+border-width: large;
+border-color: white;
+background-color: rgb(0,36,125);
+height:auto;
+width: 400px;
+padding: 35px;
+margin:20px;
 }
 
 .label1{
@@ -249,8 +317,24 @@ color: black;
 text-transform: uppercase;
 text-align:center;
 padding:10px;
+}
+
+.text5{
+font-family:"Arial", Sans-serif;
+font-size:15px;
+font-weight: bold;
+color: black;
 
 }
+
+.text6{
+font-family:"Arial", Sans-serif;
+font-size:20px;
+font-weight: bold;
+color: black;
+
+}
+
 
 .textbox1{
 /*border style */
@@ -315,7 +399,9 @@ left: 500px;
 /*text style */
 font-family:"Arial", Sans-serif;
 font-size:15px;
-text-align:center;
+text-align:right;
+display: inline-block;
+width: 150px;
 box-sizing: border-box;
 }
 
