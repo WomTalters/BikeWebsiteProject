@@ -66,19 +66,25 @@ public class ProcessOrder extends HttpServlet {
 
             out.println("<!DOCTYPE html>");
             out.println("<html>");
-            out.println("<head>");
-            out.println("<title>TC bike hire</title>");
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Hire</h1>");
+            out.println("\t<head>");
+            out.println("\t\t<title>TC bike hire</title>");
+            out.println("\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");
+            out.println("\t</head>");
+            out.println("\t<body>");
+            out.println("\t\t<h1 class=\"heading\">TC Bike Hire</h1>");
+            out.println("\t\t<div class=\"navbar\">");            
+            out.println("\t\t\t<a class=\"button1\" href=\"HomePageLoad\">Home</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"BikeGallery.html\">Bike gallery</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"CycleRoutes.html\">Cycle routes</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"LocCon.html\">General information</a>");
+            out.println("\t\t</div>");
             
             if (!ic.checkNumber(day,2) || !ic.checkNumber(month,2) || !ic.checkNumber(year,4) || !ic.checkEmail(email)){
                 
-                out.println("<h2>Bad input</h2>");
-                out.println("<br/><p>One of the fields was filled in wrong, go back and re-try</p>");
-                out.println("<br/><a href=\"HomePageLoad\">Back to home Page</a>");
-                out.println("</body>");
+                out.println("\t\t<h2>Bad input</h2><br/>");
+                out.println("\t\t<p>One of the fields was filled in wrong, go back and re-try</p><br/>");
+                out.println("\t\t<a href=\"HomePageLoad\">Back to home Page</a>");
+                out.println("\t</body>");
                 out.println("</html>");
                 return;
                 
@@ -86,10 +92,10 @@ public class ProcessOrder extends HttpServlet {
             
             for (int i = 0; i < bike_types.length; i++) {
                 if (!ic.checkNumber(numSlcBT[i],-1)){
-                    out.println("<h2>Bad input</h2>");
-                    out.println("<br/><p>One of the fields was filled in wrong, go back and re-try</p>");
-                    out.println("<br/><a href=\"HomePageLoad\">Back to home Page</a>");
-                    out.println("</body>");
+                    out.println("\t\t<h2>Bad input</h2><br/>");
+                    out.println("\t\t<p>One of the fields was filled in wrong, go back and re-try</p><br/>");
+                    out.println("\t\t<a href=\"HomePageLoad\">Back to home Page</a>");
+                    out.println("\t</body>");
                     out.println("</html>");
                     return;
                 }
@@ -100,9 +106,9 @@ public class ProcessOrder extends HttpServlet {
             
 
             if (!dbac.makeConnection()) {
-                out.println("<h2>Could not make a connection :(</h2>");
-                out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
-                out.println("</body>");
+                out.println("\t\t<h2>Could not make a connection :(</h2>");
+                out.println("\t\t<a href=\"HomePageLoad\">Go back to the home page</a>");
+                out.println("\t</body>");
                 out.println("</html>");
                 return;
             }
@@ -139,14 +145,14 @@ public class ProcessOrder extends HttpServlet {
                     dbac.nextRow();
                     //ends the servlet if the number of a certain bike type requested is less than the availble number 
                     if (Integer.parseInt(numSlcBT[i]) > Integer.parseInt(dbac.getResult("count"))) {
-                        out.println("<h2>Bad Order</h2>");
+                        out.println("\t\t<h2>Bad Order</h2>");
                         out.println(""
-                                + "<p>One of the bikes you selected has just become "
+                                + "\t\t<p>One of the bikes you selected has just become "
                                 + "unavalible, please go back to the "
                                 + "homePage and try again</p>"                                
-                                + "");
-                        out.println("<br/> <a href=\"HomePageLoad\">Back to home page</a>");
-                        out.println("</body>");
+                                + "<br/> ");
+                        out.println("\t\t<a href=\"HomePageLoad\">Back to home page</a>");
+                        out.println("\t</body>");
                         out.println("</html>");
                         return;
                     }
@@ -233,8 +239,9 @@ public class ProcessOrder extends HttpServlet {
                     + "");
             dbac.nextRow();
             if (Integer.parseInt(dbac.getResult("count")) == 1) {
-
-                out.println("<p>We already have your payment details."
+                //if there is an email address display the order
+                
+                out.println("<p>\t\tWe already have your payment details."
                         + " Your order is shown below<p>");
                 dbac.doQuery("SELECT bike.bike_id,"
                         + "          bike.bike_type"
@@ -243,43 +250,45 @@ public class ProcessOrder extends HttpServlet {
                         + "   ON bike.bike_id=booked_bike.bike_id"
                         + "   WHERE booking_id='" + booking_id + "'       ;");
 
-                out.println("<table>");
+                out.println("\t\t<table>");
                 while (dbac.nextRow() == 1) {
-                    out.println("<tr>");
-                    out.println("<td>");
+                    out.println("\t\t\t<tr>");
+                    out.println("\t\t\t\t<td>");
                     out.println(dbac.getResult("bike_id"));
-                    out.println("</td>");
-                    out.println("<td>");
+                    out.println("\t\t\t\t</td>");
+                    out.println("\t\t\t\t<td>");
                     out.println(dbac.getResult("bike_type"));
-                    out.println("</td>");
-                    out.println("</tr>");
+                    out.println("\t\t\t\t</td>");
+                    out.println("\t\t\t</tr>");
                 }
-                out.println("</table>");
+                out.println("\t\t</table><br/> ");
     
-                out.println("<br/> <a href=\"HomePageLoad\">Back to home page</a>");
+                out.println("\t\t<a href=\"HomePageLoad\">Back to home page</a>");
                 
                 
                 
             } else {
-                out.println("<p>You need to enter your payment details. Make sure they are correct before submitting<p>");
-                out.println("<form action =\"PaymentDetails\" method=\"POST\">");
-                out.println("Name: <input type=\"text\" name=\"name\"><br/>");
-                out.println("Email: <input type=\"text\" value=\"" + email + "\" name=\"email\" readonly><br/>");
-                out.println("Billing adress: <input type=\"text\" name=\"BillAdd\"><br/>");
-                out.println("Card Type<select name=\"card Type\">");
-                out.println("<option value=\"V\">Visa</option>");
-                out.println("<option value=\"MC\">Master Card</option>");
-                out.println("<option value=\"AE\">American Express</option>");
-                out.println("</select><br/>");
-                out.println("Expiry MM/YY: <input type=\"text\" name=\"MM\"><input type=\"text\" name=\"YY\"><br/>");
-                out.println("Card number: <input type=\"text\" name=\"cardNo\"><br/>");
-                out.println("Booking_id: <input type=\"text\" value=\"" + booking_id + "\" name=\"bId\" readonly><br/>");
-                out.println("<input type=\"submit\" value=\"submit\"><br/>");
-                out.println("</form>");
+                //otherwise display a form for inputing payment details
+                
+                out.println("\t\t<p>You need to enter your payment details. Make sure they are correct before submitting<p>");
+                out.println("\t\t<form action =\"PaymentDetails\" method=\"POST\">");
+                out.println("\t\t\tName: <input type=\"text\" name=\"name\"><br/>");
+                out.println("\t\t\tEmail: <input type=\"text\" value=\"" + email + "\" name=\"email\" readonly><br/>");
+                out.println("\t\t\tBilling address: <input type=\"text\" name=\"BillAdd\"><br/>");
+                out.println("\t\t\tCard Type<select name=\"card Type\">");
+                out.println("\t\t\t\t<option value=\"V\">Visa</option>");
+                out.println("\t\t\t\t<option value=\"MC\">Master Card</option>");
+                out.println("\t\t\t\t<option value=\"AE\">American Express</option>");
+                out.println("\t\t\t</select><br/>");
+                out.println("\t\t\tExpiry MM/YY: <input type=\"text\" name=\"MM\"><input type=\"text\" name=\"YY\"><br/>");
+                out.println("\t\t\tCard number: <input type=\"text\" name=\"cardNo\"><br/>");
+                out.println("\t\t\tBooking ID: <input type=\"text\" value=\"" + booking_id + "\" name=\"bId\" readonly><br/>");
+                out.println("\t\t\t<input type=\"submit\" value=\"submit\"><br/>");
+                out.println("\t\t</form>");
             }
             dbac.closeConnection();
 
-            out.println("</body>");
+            out.println("\t</body>");
             out.println("</html>");
         } finally {
             out.close();

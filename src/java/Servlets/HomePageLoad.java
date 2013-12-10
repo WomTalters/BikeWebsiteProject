@@ -45,18 +45,24 @@ public class HomePageLoad extends HttpServlet {
             
             out.println("<!DOCTYPE html>");
             out.println("<html>");
-            out.println("<head>");
-            out.println("<title>TC bike hire</title>");
-            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");  
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">"); 
-            out.println("<script src=\"hps.js\"></script>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Hire</h1>");
+            out.println("\t<head>");
+            out.println("\t\t<title>TC bike hire</title>");
+            out.println("\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");  
+            out.println("\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">"); 
+            out.println("\t\t<script src=\"hps.js\"></script>");
+            out.println("\t</head>");
+            out.println("\t<body>");
+            out.println("\t\t<h1 class=\"heading\">TC Bike Hire</h1>");
+            out.println("\t\t<div class=\"navbar\">");            
+            out.println("\t\t\t<a class=\"button1\" href=\"HomePageLoad\">Home</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"BikeGallery.html\">Bike gallery</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"CycleRoutes.html\">Cycle routes</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"LocCon.html\">General information</a>");
+            out.println("\t\t</div>");
             
             if (!dbac.makeConnection()){
-                out.println("<h2>Could not connect to the database :(</h2>");                        
-                out.println("</body>");
+                out.println("\t\t<h2>Could not connect to the database :(</h2>");                        
+                out.println("\t</body>");
                 out.println("</html>");
                 return;
             }
@@ -64,89 +70,107 @@ public class HomePageLoad extends HttpServlet {
             String [] bike_types = {"womens_mtb","mens_mtb","childs_mtb","womens_hybrid","mens_hybrid","tandem"};
             String [] bike_typesp = {"Womens mountain bike","Mens mountain bike","Childs mountain bike","Womens hybrid","Mens hybrid","Tandem"};
             
-            out.println("<script>");
+            
+            //This script contains arrays that store bike booking information used on the homepage
+            out.println("\t\t<script>");
             
             
-            out.println("var numBikeType = new Array();");
-            out.println("var bikeType = new Array();");
+            out.println("\t\t\tvar numBikeType = new Array();");
+            out.println("\t\t\tvar bikeType = new Array();");
             for (int j = 0;j<bike_types.length;j++){
-               dbac.doQuery("select count(bike_type) from bike where bike_type='"+bike_types[j]+"';");
+               dbac.doQuery(""
+                       + "SELECT COUNT(bike_type) "
+                       + "FROM bike "
+                       + "WHERE bike_type='"+bike_types[j]+"';"
+                       + "");
                dbac.nextRow();
-               out.println("bikeType["+j+"] = '"+ bike_types[j] +"';");
-               out.println("numBikeType["+j+"] = "+ Integer.parseInt(dbac.getResult("count")) +";");                                 
+               out.println("\t\t\tbikeType["+j+"] = '"+ bike_types[j] +"';");
+               out.println("\t\t\tnumBikeType["+j+"] = "+ Integer.parseInt(dbac.getResult("count")) +";");                                 
             }
             
-            String q1 = "select bike.bike_type,booked_bike.booking_id from bike inner join booked_bike on bike.bike_id=booked_bike.bike_id";
-            String q2 = "select booking.booking_date,booking.booking_period,table2.bike_type from booking inner join ("+q1+") AS table2 on booking.booking_id=table2.booking_id;";
             
-            dbac.doQuery(q2);
-            out.println("var booking_bike_type = new Array()");
-            out.println("var booking_date = new Array()");
-            out.println("var booking_period = new Array()");
+            dbac.doQuery(""
+                    + "SELECT booking.booking_date,"
+                    + "       booking.booking_period,"
+                    + "       table2.bike_type "
+                    + "FROM   booking "
+                    + "       INNER JOIN (SELECT bike.bike_type,"
+                    + "                          booked_bike.booking_id"
+                    + "                   FROM bike "
+                    + "                        INNER JOIN booked_bike "
+                    + "                        ON bike.bike_id=booked_bike.bike_id"
+                    + "                  ) AS table2 "
+                    + "       ON booking.booking_id=table2.booking_id;");
+            
+            
+            out.println("\t\t\tvar booking_bike_type = new Array()");
+            out.println("\t\t\tvar booking_date = new Array()");
+            out.println("\t\t\tvar booking_period = new Array()");
             int i = 0;
             while (dbac.nextRow()==1){
-                out.println("booking_bike_type["+i+"] = '"+ dbac.getResult("bike_type") +"';");
-                out.println("booking_date["+i+"] = '"+ dbac.getResult("booking_date") +"';");
-                out.println("booking_period["+i+"] = '"+ dbac.getResult("booking_period") +"';");
+                out.println("\t\t\tbooking_bike_type["+i+"] = '"+ dbac.getResult("bike_type") +"';");
+                out.println("\t\t\tbooking_date["+i+"] = '"+ dbac.getResult("booking_date") +"';");
+                out.println("\t\t\tbooking_period["+i+"] = '"+ dbac.getResult("booking_period") +"';");
                 i++;
             }
             
             
             
             
-            out.println("</script>"); 
+            out.println("\t\t</script>"); 
             
-            out.println("<form action=\"ProcessOrder\" method=\"POST\">");   
-            out.println("<p class=\"text1\">");
-            out.println("Year:<input class=\"textbox1\" value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
-            out.println("Month:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
-            out.println("Day:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
-            out.println("Period:<select class=\"dropdown1\" name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
-            out.println("Email Address:<input class=\"textbox2\"type=\"text\" name=\"email\">");
-            out.println("<input class =\"button1\"type=\"submit\" value=\"submit\"><p>"); 
-            out.println("<table class=\"box2\">");
-            out.println("<tr>");
-            out.println("<td class=\"label1\">");
-            out.println("Bike Type");
-            out.println("</td>");
-            out.println("<td class=\"label1\">");
-            out.println("Bike Image");
-            out.println("</td>");
-            out.println("<td class=\"label1\">");
-            out.println("Number available");
-            out.println("</td>");
-            out.println("<td class=\"label1\">");
-            out.println("Number selected");
-            out.println("</td>");
-            out.println("</tr>");
+            out.println("\t\t<form action=\"ProcessOrder\" method=\"POST\">");   
+            out.println("\t\t\t<p class=\"text1\">");
+            out.println("\t\t\t\tYear:<input class=\"textbox1\" value=\"2013\" type=\"text\" name=\"year\" id=\"year\" maxlength=\"4\" onchange=\"dateYearChange()\">");
+            out.println("\t\t\t\tMonth:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"month\" id=\"month\" maxlength=\"2\" onchange=\"dateMonthChange()\">");
+            out.println("\t\t\t\tDay:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
+            out.println("\t\t\t\tPeriod:<select class=\"dropdown1\" name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
+            out.println("\t\t\t\tEmail Address:<input class=\"textbox2\" type=\"text\" name=\"email\">");
+            out.println("\t\t\t\t<input class =\"button1\" type=\"submit\" value=\"submit\">"); 
+            out.println("\t\t\t<p>");
+            out.println("\t\t\t<table class=\"box2\">");
+            out.println("\t\t\t\t<tr>");
+            out.println("\t\t\t\t\t<td class=\"label1\">");
+            out.println("\t\t\t\t\t\tBike Type");
+            out.println("\t\t\t\t\t</td>");
+            out.println("\t\t\t\t\t<td class=\"label1\">");
+            out.println("\t\t\t\t\t\tBike Image");
+            out.println("\t\t\t\t\t</td>");
+            out.println("\t\t\t\t\t<td class=\"label1\">");
+            out.println("\t\t\t\t\t\tNumber available");
+            out.println("\t\t\t\t\t</td>");
+            out.println("\t\t\t\t\t<td class=\"label1\">");
+            out.println("\t\t\t\t\t\tNumber selected");
+            out.println("\t\t\t\t\t</td>");
+            out.println("\t\t\t\t</tr>");
             for (int j = 0;j<bike_types.length;j++){
-                out.println("<tr>");
-                out.println("<td class=\"text2\">");
-                out.println(bike_typesp[j]);
-                out.println("</td>");
-                out.println("<td class=\"selectionElement\">");
-                out.println("<img class=\"bikePic\" src=\""+ bike_types[j] +".jpg\">");
-                out.println("</td>");
-                out.println("<td class=\"selectionElement\">");
-                out.println("<text class=\"text3\" id=\"numberOf"+bike_types[j]+"\">0</text>");
-                out.println("</td>");
-                out.println("<td class=\"selectionElement\">");
-                out.println("<input class=\"textbox3\" type=\"text\" value=\"0\" name=\"selectNumOf"+bike_types[j]+"\">");
-                out.println("</td>");
-                out.println("</tr>");
+                out.println("\t\t\t\t<tr>");
+                out.println("\t\t\t\t\t<td class=\"text2\">");
+                out.println("\t\t\t\t\t\t"+bike_typesp[j]);
+                out.println("\t\t\t\t\t</td>");
+                out.println("\t\t\t\t\t<td class=\"selectionElement\">");
+                out.println("\t\t\t\t\t\t<img class=\"bikePic\" alt=\""+bike_typesp[j]+"\" src=\""+ bike_types[j] +".jpg\">");
+                out.println("\t\t\t\t\t</td>");
+                out.println("\t\t\t\t\t<td class=\"selectionElement\">");
+                out.println("\t\t\t\t\t\t<div class=\"text3\" id=\"numberOf"+bike_types[j]+"\">0</div>");
+                out.println("\t\t\t\t\t</td>");
+                out.println("\t\t\t\t\t<td class=\"selectionElement\">");
+                out.println("\t\t\t\t\t\t<input class=\"textbox3\" type=\"text\" value=\"0\" name=\"selectNumOf"+bike_types[j]+"\">");
+                out.println("\t\t\t\t\t</td>");
+                out.println("\t\t\t\t</tr>");
             }
     
-            out.println("</table>");
+            out.println("\t\t\t</table>");
             
             
             
             
-            out.println("</form>");
-            out.println("<script>dateChange();</script>");
+            out.println("\t\t</form>");
+            out.println("\t\t<script>dateChange();</script>");
             
             dbac.closeConnection();
             
-            out.println("</body>");
+            out.println("\t</body>");
             out.println("</html>");
             
             

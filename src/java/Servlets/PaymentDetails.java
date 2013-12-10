@@ -53,27 +53,33 @@ public class PaymentDetails extends HttpServlet {
             
             out.println("<!DOCTYPE html>");
             out.println("<html>");
-            out.println("<head>");
-            out.println("<title>TC bike hire</title>");     
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Hire</h1>");
+            out.println("\t<head>");
+            out.println("\t\t<title>TC bike hire</title>");     
+            out.println("\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");
+            out.println("\t</head>");
+            out.println("\t<body>");
+            out.println("\t\t<h1 class=\"heading\">TC Bike Hire</h1>");
+            out.println("\t\t<div class=\"navbar\">");            
+            out.println("\t\t\t<a class=\"button1\" href=\"HomePageLoad\">Home</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"BikeGallery.html\">Bike gallery</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"CycleRoutes.html\">Cycle routes</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"LocCon.html\">General information</a>");
+            out.println("\t\t</div>");
             
             if (!ic.checkString(name,48) || !ic.checkString(billAdd,200) ||  !ic.checkNumber(MM,2) ||  !ic.checkNumber(YY,2) || !ic.checkNumber(cardNo,16)){
                 
                 
-                out.println("<h2>Bad input</h2>");
-                out.println("<br/><p>One of the fields was filled in wrong, go back and re-try</p>");
-                out.println("</body>");
+                out.println("\t\t<h2>Bad input</h2><br/>");
+                out.println("\t\t<p>One of the fields was filled in wrong, go back and re-try</p>");
+                out.println("\t</body>");
                 out.println("</html>");
                 return;
             }
             
             if (!dbac.makeConnection()) {
-                out.println("<h2>Could not make a connection :(</h2>");
-                out.println("<a href=\"HomePageLoad\">Go back to the home page</a>");
-                out.println("</body>");
+                out.println("\t\t<h2>Could not make a connection :(</h2>");
+                out.println("\t\t<a href=\"HomePageLoad\">Go back to the home page</a>");
+                out.println("\t</body>");
                 out.println("</html>");
                 return;
             }
@@ -90,7 +96,7 @@ public class PaymentDetails extends HttpServlet {
                     + ");");
             
             
-            out.println("<p>payment details have been collected!"
+            out.println("\t\t<p>payment details have been collected!"
                     + " Your order is shown below<p>");
            
             dbac.doQuery("SELECT bike.bike_id,"
@@ -101,23 +107,23 @@ public class PaymentDetails extends HttpServlet {
                     + "   WHERE booking_id='"+bId+"'       ;");
             
             
-            out.println("<table>");
+            out.println("\t\t<table>");
             while(dbac.nextRow()==1){
-                out.println("<tr>");
-                out.println("<td>");
-                out.println(dbac.getResult("bike_id"));
-                out.println("</td>");
-                out.println("<td>");
-                out.println(dbac.getResult("bike_type"));
-                out.println("</td>");
-                out.println("</tr>");
+                out.println("\t\t\t<tr>");
+                out.println("\t\t\t\t<td>");
+                out.println(dbac.getResult("\t\t\t\t\tbike_id"));
+                out.println("\t\t\t\t</td>");
+                out.println("\t\t\t\t<td>");
+                out.println(dbac.getResult("\t\t\t\t\tbike_type"));
+                out.println("\t\t\t\t</td>");
+                out.println("\t\t\t</tr>");
             }
-            out.println("</table>");
+            out.println("\t\t</table><br/> ");
            
-            out.println("<br/> <a href=\"HomePageLoad\">Back to home page</a>");
+            out.println("\t\t<a href=\"HomePageLoad\">Back to home page</a>");
             
             dbac.closeConnection();
-            out.println("</body>");
+            out.println("\t</body>");
             out.println("</html>");
         } finally {
             out.close();

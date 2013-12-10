@@ -44,7 +44,13 @@ public class adminServ extends HttpServlet {
             out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheet.css\">");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1 class=\"heading\" id=\"fred\">TC Bike Hire : Admin</h1>");
+            out.println("\t\t<h1 class=\"heading\">TC Bike Hire</h1>");
+            out.println("\t\t<div class=\"navbar\">");            
+            out.println("\t\t\t<a class=\"button1\" href=\"HomePageLoad\">Home</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"BikeGallery.html\">Bike gallery</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"CycleRoutes.html\">Cycle routes</a>");
+            out.println("\t\t\t<a class=\"button1\" href=\"LocCon.html\">General information</a>");
+            out.println("\t\t</div>");
             
             String y = request.getParameter("y");
             String m = request.getParameter("m");
