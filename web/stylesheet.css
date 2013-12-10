@@ -1,5 +1,6 @@
 
 .button1
+ /* navigation buttons */
 {
 /* button1 position */
 display:inline-block;
@@ -30,6 +31,7 @@ padding-top: 20px;
 }
 
 .button2
+ /* homepage- submit button */
 {
 /* button1 position */
 display:inline-block;
@@ -58,6 +60,7 @@ text-decoration:none;
 }
 
 .button3
+/* payment/admin - submit button*/
 {
 /* button1 position */
 display:inline-block;
@@ -85,8 +88,8 @@ text-decoration:none;
 
 }
 
-
 .dropdown1
+/* payment-card type, homepage- period */
 {
 /* dropdown1 position */
 display:inline;
@@ -100,10 +103,10 @@ padding:10px;
 margin:2px;
 width:100px;
 height:40px;
-
 }
 
 .heading
+/* top header for all pages except for admin */
 {
 /* text style */
 font-family:"Arial", Sans-serif;
@@ -126,6 +129,7 @@ padding: 20px;
 }
 
 .heading1
+/* top header used for adin page*/
 {
 /* text style */
 font-family:"Arial", Sans-serif;
@@ -145,7 +149,9 @@ margin:0px;
 padding: 20px;
 }
 
-div.navbar{
+div.navbar
+/* navigation bar all pages but admin*/
+{
 border-radius: 10px;
 border-top-left-radius: 0px;
 border-top-right-radius:0px;
@@ -159,12 +165,15 @@ padding: 10px;
 }
 
 
-.body{
+.body
+{
 background-color: white;
 height: 1500px;
 }
 
-.box1{
+.box1
+/* homepage - booking form*/
+{
 /* text style */
 font-family:"Arial", Sans-serif;
 font-size:15px;
@@ -181,7 +190,9 @@ width: 1310px;
 padding: 10px;
 }
 
-.box2{
+.box2
+/* orderconfirm, homepage, payment - main content box */
+{
 position:relative;
 top: 50px;
 left:5px;
@@ -192,17 +203,18 @@ border-radius: 10px;
 background-color: rgb(0,36,125);
 margin:0px;
 padding:10px;
-width:400px;
+width:500px;
 }
 
-.box3{
+.box3
+/* orderconfirm,payment - summ box */
+{
 /* text style */
 font-family:"Arial", Sans-serif;
 font-size:15px;
 font-weight: bold;
 color: white;
 text-transform: uppercase;
-
 /*border style */
 border-radius: 10px;
 border-width: large;
@@ -213,7 +225,9 @@ width: 1310px;
 padding: 20px;
 }
 
-.box4{
+.box4
+/* admin - content box */
+{
 /* text style */
 font-family:"Arial", Sans-serif;
 font-size:15px;
@@ -233,7 +247,9 @@ padding: 35px;
 margin:20px;
 }
 
-.label1{
+.label1
+/* homepage - table titles*/
+{
 font-family:"Arial", Sans-serif;
 font-size:20px;
 font-weight: bold;
@@ -243,7 +259,9 @@ text-align:center;
 padding:10px;
 }
 
-.label2{
+.label2
+/*payment, admin - form titles */
+{
 font-family:"Arial", Sans-serif;
 font-size:20px;
 font-weight: bold;
@@ -253,7 +271,9 @@ text-align:left;
 padding:10px;
 }
 
-.label3{
+.label3
+/* orderconfirm - bike reg */
+{
 font-family:"Arial", Sans-serif;
 font-size:20px;
 font-weight: bold;
@@ -261,7 +281,9 @@ color: white;
 padding:10px;
 }
 
-div.bikeType, div.bikeModels{
+div.bikeType, div.bikeModels
+/* bikegallery - subtitles */
+{
 font-family:"Arial", Sans-serif;
 font-size:20px;
 font-weight: bold;
@@ -271,15 +293,12 @@ text-align:left;
 padding:10px;
 }
 
-div.desc{
-font-family:"Arial", Sans-serif;
-font-size:15px;
-padding:10px;
-
-}
 
 
-.text2{
+
+.text2
+/* homepage - bike types names, */
+{
 font-family:"Arial", Sans-serif;
 font-size:15px;
 font-weight: bold;
@@ -290,7 +309,9 @@ padding:10px;
 
 }
 
-.text3{
+.text3
+/* homepage - number of bikes aval */
+{
 font-family:"Arial", Sans-serif;
 font-size:15px;
 text-align:center;
@@ -298,7 +319,9 @@ padding:100px;
 
 }
 
-.text4{
+.text4
+/* orderconfirm - bikeType*/
+{
 /*border style */
 border-style:solid;
 border-width: small;
@@ -319,7 +342,9 @@ text-align:center;
 padding:10px;
 }
 
-.text5{
+.text5
+/* locCon - all text*/
+{
 font-family:"Arial", Sans-serif;
 font-size:15px;
 font-weight: bold;
@@ -327,7 +352,9 @@ color: black;
 
 }
 
-.text6{
+.text6
+/* Admin - subtitles*/
+{
 font-family:"Arial", Sans-serif;
 font-size:20px;
 font-weight: bold;
@@ -335,7 +362,9 @@ color: black;
 
 }
 
-.text7{
+.text7
+/* cycleroute - content text*/
+{
 font-family:"Arial", Sans-serif;
 font-size:15px;
 text-align:left;
@@ -345,29 +374,33 @@ padding:10px;
 }
 
 
-.textbox1{
+.textbox1
+/* homepage - year, month, day */
+{
 /*border style */
 border-style:solid;
 border-width: small;
 border-radius: 10px;
 border-color: white;
-padding:10px;
+padding:5px;
 margin:2px;
 width:50px;
-height:10px;
+height:15px;
 /*text style */
 font-family:"Arial", Sans-serif;
 font-size:15px;
 text-align:center;
 }
 
-.textbox2{
+.textbox2
+/* homepage - email address*/
+{
 /*border style */
 border-style:solid;
 border-width: small;
 border-radius: 10px;
 border-color: white;
-padding:10px;
+padding:5px;
 margin:2px;
 width:200px;
 height:15px;
@@ -377,13 +410,15 @@ font-size:15px;
 text-align:center;
 }
 
-.textbox3{
+.textbox3
+/* homepage - quantity ordered*/
+{
 /*border style */
 border-style:solid;
 border-width: small;
 border-radius: 10px;
 border-color: white;
-padding:10px;
+padding:5px;
 margin:2px;
 width:150px;
 height:15px;
@@ -393,8 +428,10 @@ font-size:15px;
 text-align:center;
 }
 
-/*for form text boxes */
-.textbox4{
+
+.textbox4
+/* payment - all fields but expire date, admin - mm yy*/
+{
 /*border style */
 border-style:solid;
 border-width: small;
@@ -403,25 +440,26 @@ border-color: white;
 padding:10px;
 margin:2px;
 height:15px;
-width:150px;
+width:200px;
 left: 500px;
 /*text style */
 font-family:"Arial", Sans-serif;
 font-size:15px;
-text-align:right;
+text-align:center;
 display: inline-block;
-width: 150px;
 box-sizing: border-box;
 }
 
-.textbox5{
+.textbox5
+/* payment - expire date*/
+{
 /*border style */
 border-style:solid;
 border-width: small;
 border-radius: 10px;
 border-color: white;
 padding:10px;
-margin:10px;
+margin:2px;
 width:50px;
 height:15px;
 /*text style */
@@ -431,7 +469,9 @@ text-align:center;
 box-sizing: border-box;
 }
 
-.h1{
+.h1
+/* cycleroute - subtitles*/
+{
 font-family:"Arial", Sans-serif;
 font-size:20px;
 font-weight: bold;
@@ -439,7 +479,9 @@ text-transform: uppercase;
 text-decoration: underline;
 }
 
-.bikePic{
+.bikePic
+/* homepage-  bike picture*/
+{
 padding: 10px;
 margin:5px;
 width: 300px;
@@ -454,6 +496,7 @@ width:350px;
 }
 
 div.img
+/* bike gallery - bike pictures*/
 {
 margin: 5px;
 padding: 5px;
@@ -471,6 +514,7 @@ border-color: rgb(0,36,125);
 }
   
 div.desc
+/* bike gallery - description*/
 {
   text-align: center;
   font-weight: normal;
@@ -478,19 +522,15 @@ div.desc
   margin: 5px;
 }
 
-.routeImg{
+.routeImg
+/* cycleroute - route map*/
+{
 float:left;
 display:inline;
 margin: 10px;
 width: 700px;
 }
 
-.mapImg{
-float:left;
-display:inline;
-margin: 10px;
-width: 400px;
-}
 
 
 
