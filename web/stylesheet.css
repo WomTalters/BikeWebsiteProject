@@ -11,13 +11,15 @@ border-radius: 10px;
 border-width: medium;
 border-color: white;
 background-color: rgb(253,195,1);
-padding:2px;
+padding-top:10px;
+padding-bottom:10px;
 margin:2px;
 width: 20%;
-height:90%;
+height:75%;
 /*button1 text*/
 text-transform: uppercase;
 text-align:center;
+vertical-align:middle;
 font-family:"Arial", Sans-serif;
 font-weight: bold;
 font-style:bold;
@@ -31,14 +33,15 @@ padding-top: 20px;
 {
 /* button1 position */
 display:inline-block;
-float:left;
+float:right;
 /*button1 shape*/
 border-style: solid;
 border-radius: 10px;
 border-width: medium;
 border-color: white;
 background-color: rgb(253,195,1);
-padding:20px;
+padding-top:10px;
+padding-bottom:10px;
 margin:2px;
 width:20%;
 height:90%;
