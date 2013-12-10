@@ -335,6 +335,15 @@ color: black;
 
 }
 
+.text7{
+font-family:"Arial", Sans-serif;
+font-size:15px;
+text-align:left;
+vertical-align: top;
+padding:10px;
+
+}
+
 
 .textbox1{
 /*border style */
@@ -425,8 +434,9 @@ box-sizing: border-box;
 .h1{
 font-family:"Arial", Sans-serif;
 font-size:20px;
-font-weight: normal;
+font-weight: bold;
 text-transform: uppercase;
+text-decoration: underline;
 }
 
 .bikePic{
@@ -466,6 +476,20 @@ div.desc
   font-weight: normal;
   width: 350px;
   margin: 5px;
+}
+
+.routeImg{
+float:left;
+display:inline;
+margin: 10px;
+width: 700px;
+}
+
+.mapImg{
+float:left;
+display:inline;
+margin: 10px;
+width: 400px;
 }
 
 
