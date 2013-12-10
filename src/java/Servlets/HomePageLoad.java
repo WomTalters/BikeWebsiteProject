@@ -126,7 +126,7 @@ public class HomePageLoad extends HttpServlet {
             out.println("\t\t\t\tDay:<input class=\"textbox1\" value=\"1\" type=\"text\" name=\"day\" id=\"day\" maxlength=\"2\" onchange=\"dateDayChange()\">");
             out.println("\t\t\t\tPeriod:<select class=\"dropdown1\" name=\"period\" id=\"period\" onchange=\"dateChange()\"> <option value=\"AM\">AM</option><option value=\"PM\">PM</option><option value=\"ALL\">ALL</option></select>");
             out.println("\t\t\t\tEmail Address:<input class=\"textbox2\" type=\"text\" name=\"email\">");
-            out.println("\t\t\t\t<input class =\"button1\" type=\"submit\" value=\"submit\">"); 
+            out.println("\t\t\t\t<input class =\"button2\" type=\"submit\" value=\"submit\">"); 
             out.println("\t\t\t</p>");
             out.println("\t\t\t<table class=\"box2\">");
             out.println("\t\t\t\t<tr>");
