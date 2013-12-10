@@ -3,12 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/tests.html</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/admin.html</file>
             <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/src/java/otherClasses/DataBaseAccess.java</file>
-            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/src/java/otherClasses/InputCheck.java</file>
-            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/hps.js</file>
-            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/src/java/Servlets/PaymentDetails.java</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/homepage11.html</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/CycleRoutes.html</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/LocCon.html</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/stylesheet.css</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/HomePage.jsp</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/web/BikeGallery.html</file>
             <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/src/java/Servlets/HomePageLoad.java</file>
             <file>file:/C:/Users/Tom/Documents/GitHub/BikeWebsiteProject/src/java/Servlets/ProcessOrder.java</file>
         </group>

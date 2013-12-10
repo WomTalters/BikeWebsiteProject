@@ -275,7 +275,7 @@ public class ProcessOrder extends HttpServlet {
                 out.println("\t\t\tName: <input type=\"text\" name=\"name\"><br/>");
                 out.println("\t\t\tEmail: <input type=\"text\" value=\"" + email + "\" name=\"email\" readonly><br/>");
                 out.println("\t\t\tBilling address: <input type=\"text\" name=\"BillAdd\"><br/>");
-                out.println("\t\t\tCard Type<select name=\"card Type\">");
+                out.println("\t\t\tCard Type:<select name=\"card Type\">");
                 out.println("\t\t\t\t<option value=\"V\">Visa</option>");
                 out.println("\t\t\t\t<option value=\"MC\">Master Card</option>");
                 out.println("\t\t\t\t<option value=\"AE\">American Express</option>");
